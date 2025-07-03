@@ -18,8 +18,10 @@ import Perfil from "../pages/Admin/Perfil";
 
 import Topbar from "../pages/users/component/Topbar";
 import Dashboard2 from "../pages/users/views/Dashboard2";
-import Catalogo from "../pages/users/views/Catalogo";
-import Compras from "../pages/users/views/Compras";
+import Album2 from "../pages/users/views/Album2";
+import Cancion from "../pages/users/views/Cancion";
+import Merch from "../pages/users/views/Merch";
+import Carrito from "../pages/users/views/Carrito";
 import Perfil_usuario from "../pages/users/views/Perfil_usuario";
 
 
@@ -115,20 +117,39 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/Catalogo"
+        path="/album2"
         element={
           <>
             <Topbar />
-            <Catalogo />
+            <Album2 />
           </>
         }
       />
       <Route
-        path="/Compras"
+        path="/cancion"
         element={
           <>
             <Topbar />
-            <Compras />
+            <Cancion />
+          </>
+        }
+      />
+      <Route
+        path="/merch"
+        element={
+          <>
+            <Topbar />
+            <Merch />
+          </>
+        }
+      />
+
+       <Route
+        path="/carrito"
+        element={
+          <>
+            <Topbar />
+            <Carrito />
           </>
         }
       />

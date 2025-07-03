@@ -42,7 +42,7 @@ const Topbar = () => {
 
           {/* Lista de opciones del menú */}
           <ul className="space-y-6">
-            {/* Item Dashboard */}
+            {/* Item Home */}
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors duration-300">
               <a href="/dashboard2" className="flex items-center gap-3">
                 <FaHome size={20} /> {/* Ícono */}
@@ -50,21 +50,38 @@ const Topbar = () => {
               </a>
             </li>
 
-            {/* Item Catálogo */}
+            {/* Item Album */}
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors duration-300">
-              <a href="/Catalogo" className="flex items-center gap-3">
+              <a href="/album2" className="flex items-center gap-3">
                 <GrCatalog size={20} /> {/* Ícono */}
-                Catalogo {/* Texto del enlace */}
+                Álbum {/* Texto del enlace */}
               </a>
             </li>
 
-            {/* Item Compras */}
+            {/* Item Canciones */}
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors duration-300">
-              <a href="/Compras" className="flex items-center gap-3">
+              <a href="/cancion" className="flex items-center gap-3">
                 <FaShoppingCart size={20} /> {/* Ícono */}
-                Compras {/* Texto del enlace */}
+                Canciones {/* Texto del enlace */}
               </a>
             </li>
+
+                        {/* Item Merch */}
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors duration-300">
+              <a href="/merch" className="flex items-center gap-3">
+                <GrCatalog size={20} /> {/* Ícono */}
+                Ropa {/* Texto del enlace */}
+              </a>
+            </li>
+
+                        {/* Item Carrito */}
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors duration-300">
+              <a href="/carrito" className="flex items-center gap-3">
+                <GrCatalog size={20} /> {/* Ícono */}
+                Carrito {/* Texto del enlace */}
+              </a>
+            </li>
+
           </ul>
         </div>
       </nav>
