@@ -376,18 +376,7 @@ const AuraFlowDashboard = () => {
               <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
                 Tu Universo Musical,<br />Siempre en Armonía.
               </h1>
-              <p className="text-lg md:text-xl text-gray-200 mb-6 max-w-lg">
-                Organiza géneros, crea grupos, impulsa artistas y lleva tus eventos al siguiente nivel con una experiencia sin igual.
-              </p>
-              <motion.button
-                // CAMBIO DE COLOR: Botón Hero (degradado de verdes)
-                className="bg-gradient-to-r from-green-600 to-lime-500 text-white font-bold py-3 px-8 rounded-full shadow-lg flex items-center group"
-                variants={heroButtonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                Descubre Ahora <FaArrowRight className="inline-block ml-3 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              
             </div>
             {/* Animated SVG/Lottie placeholder for visualizer/album art */}
             <motion.div
