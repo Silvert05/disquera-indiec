@@ -63,10 +63,10 @@ const AuraFlowDashboard = () => {
 
   // Dummy Data
   const statsData = {
-    totalTracks: "12,345",
-    activeArtists: "876",
-    upcomingEvents: "14",
-    totalPlaylists: "2,100",
+    PistasTotales: "12,345",
+   ArtistasActivos: "876",
+    PróximosEventos: "14",
+    ReproduccionesTotales : "2,100",
   };
 
   const salesData = {
@@ -421,6 +421,8 @@ const AuraFlowDashboard = () => {
                 {key === "activeArtists" && <FaUserCircle />}
                 {key === "upcomingEvents" && <FaCalendarAlt />}
                 {key === "totalPlaylists" && <FaPlus />}
+
+                
               </div>
             </motion.div>
           ))}
