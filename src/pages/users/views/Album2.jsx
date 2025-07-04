@@ -2,128 +2,142 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiSearch, FiShoppingCart, FiX, FiFilter } from "react-icons/fi";
 
-// Datos de ejemplo para los álbumes
+// Datos de álbumes
 const initialAlbums = [
   {
     id: 1,
-    title: "Roll With The Punchies",
+    name: "Roll With The Punchies",
     artist: "Bryan Adams",
     year: 2023,
     genre: "Pop",
     price: 109.26,
-    image: "https://i.scdn.co/image/ab67616d0000b27379444b7e1f30ee546f05d8eb",
+    image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Bryan_Adams_-_So_Happy_It_Hurts.png/220px-Bryan_Adams_-_So_Happy_It_Hurts.png",
     details: {
       tracks: 12,
-      status: "Disponible",
-      quality: "Alta Calidad"
-    }
+      duration: "45 min",
+      label: "BMG",
+      format: "CD/Digital"
+    },
   },
   {
     id: 2,
-    title: "El Que Quiera Dormir",
+    name: "El Que Quiera Dormir",
     artist: "Bryan Adams",
     year: 2023,
     genre: "Pop",
     price: 24.42,
-    image: "https://cdn-images.dzcdn.net/images/cover/36d1aa06520e7fc9ce26757a71971d7f/1900x1900-000000-80-0-0.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Bryan_Adams_-_So_Happy_It_Hurts.png/220px-Bryan_Adams_-_So_Happy_It_Hurts.png",
     details: {
       tracks: 10,
-      status: "Disponible",
-      quality: "Alta Calidad"
-    }
+      duration: "38 min",
+      label: "BMG",
+      format: "Vinilo"
+    },
   },
   {
     id: 3,
-    title: "No Sta Li",
+    name: "No Sta Li",
     artist: "Grupo Pilon",
     year: 2015,
     genre: "Jazz",
     price: 24.42,
-    image: "https://i.scdn.co/image/ab67616d00001e02289a226b6c24cb19eeb7a2cd",
+    image: "https://m.media-amazon.com/images/I/71Hgdo8NI9L.jpg",
     details: {
       tracks: 8,
-      status: "Últimas copias",
-      quality: "Estándar"
-    }
+      duration: "42 min",
+      label: "Sony Music",
+      format: "CD"
+    },
   },
   {
     id: 4,
-    title: "Alsa",
+    name: "Alsa",
     artist: "Niña Coyote Esa Chica",
-    year: "Torriado",
+    year: 2023,
     genre: "Clásica",
     price: 14.50,
-    image: "https://cdn-images.dzcdn.net/images/cover/f15cae20b541646a257bc9cbbb67f3cd/0x1900-000000-80-0-0.jpg",
+    image: "https://i.scdn.co/image/ab67616d0000b2731d9c6602aa95abd8c12b01b5",
     details: {
-      tracks: 15,
-      status: "Disponible",
-      quality: "Alta Calidad"
-    }
+      tracks: 14,
+      duration: "52 min",
+      label: "Torriado",
+      format: "Digital"
+    },
   },
   {
     id: 5,
-    title: "Nosotros",
+    name: "Ago",
     artist: "Ago",
     year: 2010,
     genre: "Estadillo",
     price: 2.00,
-    image: "https://cdn-images.dzcdn.net/images/cover/4fcecb51a7eab8370d0c98b471aac088/1900x1900-000000-80-0-0.jpg",
+    image: "https://i1.sndcdn.com/artworks-000075914633-6e9z1l-t500x500.jpg",
     details: {
-      tracks: 7,
-      status: "Agotado",
-      quality: "Estándar"
-    }
+      tracks: 9,
+      duration: "35 min",
+      label: "Independiente",
+      format: "CD"
+    },
   },
   {
     id: 6,
-    title: "Somberlain",
+    name: "Somberlain",
     artist: "Dissertion",
     year: 2005,
     genre: "Rock",
     price: 17.27,
-    image: "https://cdn-images.dzcdn.net/images/cover/e205344f947ecddaf04f2230fc1cb6ad/0x1900-000000-80-0-0.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Dissection_-_Storm_of_the_Light%27s_Bane.jpg/220px-Dissection_-_Storm_of_the_Light%27s_Bane.jpg",
     details: {
-      tracks: 9,
-      status: "Disponible",
-      quality: "Alta Calidad"
-    }
+      tracks: 11,
+      duration: "48 min",
+      label: "Nuclear Blast",
+      format: "Vinilo"
+    },
   },
   {
     id: 7,
-    title: "Liberación",
+    name: "Liberación",
     artist: "Azucena",
     year: 2007,
     genre: "Clásica",
     price: 20.00,
-    image: "https://s.songswave.com/album-images/vol1001/207/207685/1377021-big/Don-T-Be-Scared-cover.jpg",
+    image: "https://i.scdn.co/image/ab67616d0000b2731d9c6602aa95abd8c12b01b5",
     details: {
-      tracks: 12,
-      status: "Disponible",
-      quality: "Alta Calidad"
-    }
+      tracks: 7,
+      duration: "40 min",
+      label: "Sony Classical",
+      format: "CD"
+    },
   },
   {
     id: 8,
-    title: "Scream",
-    artist: "Otary Osbourne",
+    name: "Scream",
+    artist: "Ozzy Osbourne",
     year: 2004,
     genre: "Rock",
     price: 53.05,
-    image: "https://i1.sndcdn.com/artworks-000049400990-wezqge-t500x500.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3e/Ozzy_Osbourne_-_Scream.jpg/220px-Ozzy_Osbourne_-_Scream.jpg",
     details: {
-      tracks: 11,
-      status: "Últimas copias",
-      quality: "Estándar"
-    }
-  }
+      tracks: 12,
+      duration: "50 min",
+      label: "Epic",
+      format: "CD/Digital"
+    },
+  },
 ];
 
-const genres = ["Pop", "Jazz", "Clásica", "Rock", "Estadillo"];
-const artists = [...new Set(initialAlbums.map(album => album.artist))];
+const artists = [
+  "Bryan Adams",
+  "Grupo Pilon",
+  "Niña Coyote Esa Chica",
+  "Ago",
+  "Dissertion",
+  "Azucena",
+  "Ozzy Osbourne"
+];
 
 const AlbumStore = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [modalDetailsOpen, setModalDetailsOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
@@ -147,14 +161,6 @@ const AlbumStore = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleGenreFilterChange = (genre) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genre)
-        ? prev.filter((g) => g !== genre)
-        : [...prev, genre]
-    );
-  };
-
   const handleArtistFilterChange = (artist) => {
     setSelectedArtists((prev) =>
       prev.includes(artist)
@@ -173,7 +179,7 @@ const AlbumStore = () => {
     setSelectedAlbum(null);
   };
 
-  const handleAddToCart = () => {
+  const handleAcquireAlbum = () => {
     closeDetailsModal();
     setModalSuccessOpen(true);
     setTimeout(() => {
@@ -182,11 +188,14 @@ const AlbumStore = () => {
   };
 
   const filteredAlbums = initialAlbums.filter((album) => {
-    const matchesSearch = album.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGenre = selectedGenres.length === 0 || selectedGenres.includes(album.genre);
-    const matchesArtist = selectedArtists.length === 0 || selectedArtists.includes(album.artist);
-    
-    return matchesSearch && matchesGenre && matchesArtist;
+    const matchesSearch = album.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const matchesArtist =
+      selectedArtists.length === 0 || selectedArtists.includes(album.artist);
+
+    return matchesSearch && matchesArtist;
   });
 
   const containerVariants = {
@@ -328,8 +337,7 @@ const AlbumStore = () => {
                 <FiX size={28} />
               </button>
             </div>
-            
-            <div className="relative mb-8">
+            <div className="relative mb-6">
               <input
                 type="text"
                 placeholder="Buscar Álbum..."
@@ -338,26 +346,6 @@ const AlbumStore = () => {
                 className="glass-card bg-transparent border border-gray-700 p-3 pl-10 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
               />
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            </div>
-
-            <h2 className="text-xl font-bold mb-4 text-white">Género</h2>
-            <div className="space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
-              {genres.map((genre) => (
-                <motion.label
-                  key={genre}
-                  className="flex items-center text-gray-300 cursor-pointer"
-                  whileHover={{ x: 5, color: "#00FF8C" }}
-                  transition={{ duration: 0.1 }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedGenres.includes(genre)}
-                    onChange={() => handleGenreFilterChange(genre)}
-                    className="form-checkbox h-5 w-5 text-[#00FF8C] bg-gray-700 border-gray-600 rounded focus:ring-[#00FF8C] mr-2"
-                  />
-                  {genre}
-                </motion.label>
-              ))}
             </div>
 
             <h2 className="text-xl font-bold mb-4 text-white">Artista</h2>
@@ -386,44 +374,24 @@ const AlbumStore = () => {
       {/* Filter sidebar for desktop */}
       {windowWidth >= 768 && (
         <motion.div
-          className="hidden md:block fixed top-16 left-10 md:left-72 h-[calc(100vh-6rem)] w-74 p-4 glass-card m-12 flex-shrink-1 custom-scrollbar overflow-y-auto z-30 pt-10"
+          className="hidden md:block fixed top-16 left-0 md:left-72 h-[calc(100vh-4rem)] w-72 p-6 glass-card m-6 flex-shrink-0 custom-scrollbar overflow-y-auto z-30"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, type: "spring", stiffness: 120, damping: 14 }}
         >
-          <div className="relative mb-8">
+          <div className="relative mb-6">
             <input
               type="text"
               placeholder="Buscar Álbum..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="glass-card bg-transparent border border-gray-500 p-3 pl-10 rounded-lg w-full text-gray-100 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
+              className="glass-card bg-transparent border border-gray-700 p-3 pl-10 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
             />
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
 
-          <h2 className="text-xl font-bold mb-4 text-white">Género</h2>
-          <div className="space-y-3 max-h-[calc(100vh-20rem)] overflow-y-auto custom-scrollbar">
-            {genres.map((genre) => (
-              <motion.label
-                key={genre}
-                className="flex items-center text-gray-300 cursor-pointer"
-                whileHover={{ x: 5, color: "#00FF8C" }}
-                transition={{ duration: 0.1 }}
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedGenres.includes(genre)}
-                  onChange={() => handleGenreFilterChange(genre)}
-                  className="form-checkbox h-5 w-5 text-[#00FF8C] bg-gray-700 border-gray-600 rounded focus:ring-[#00FF8C] mr-2"
-                />
-                {genre}
-              </motion.label>
-            ))}
-          </div>
-
           <h2 className="text-xl font-bold mb-4 text-white">Artista</h2>
-          <div className="space-y-3 max-h-[calc(100vh-20rem)] overflow-y-auto custom-scrollbar">
+          <div className="space-y-3 max-h-[calc(100vh-18rem)] overflow-y-auto custom-scrollbar">
             {artists.map((artist) => (
               <motion.label
                 key={artist}
@@ -445,16 +413,7 @@ const AlbumStore = () => {
       )}
 
       {/* Main content */}
-      <div className="flex-1 p-4 sm:p-6 md:ml-[calc(18rem+1.5rem)] md:pt-8">
-        <motion.h1 
-          className="text-3xl sm:text-4xl font-bold mb-6 text-white"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Álbumes Disponibles
-        </motion.h1>
-
+      <div className="flex-1 p-4 sm:p-6 md:ml-[calc(18rem+1.5rem)]">
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           variants={containerVariants}
@@ -475,16 +434,16 @@ const AlbumStore = () => {
                 >
                   <img
                     src={album.image}
-                    alt={album.title}
+                    alt={album.name}
                     className="w-full h-48 sm:h-56 object-cover mb-4 rounded-lg border border-gray-700"
                   />
                   <h3 className="text-base sm:text-lg font-semibold text-white mb-1 line-clamp-2">
-                    {album.title}
+                    {album.name}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-2">{album.artist}</p>
+                  <p className="text-gray-400 text-sm mb-1">{album.artist}</p>
                   <p className="text-gray-400 text-xs mb-2">{album.year} • {album.genre}</p>
                   <p className="text-lg sm:text-xl font-bold text-[#00FF8C] mb-4">
-                    €{album.price.toFixed(2)}
+                    ${album.price.toFixed(2)}
                   </p>
                   <motion.button
                     className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-medium sm:font-bold py-2 px-3 sm:py-2 sm:px-4 rounded-full shadow-lg flex items-center justify-center gap-2 group text-sm sm:text-base"
@@ -493,7 +452,7 @@ const AlbumStore = () => {
                     whileTap="tap"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleAddToCart();
+                      handleAcquireAlbum();
                     }}
                   >
                     <FiShoppingCart className="group-hover:translate-y-0.5 transition-transform" />
@@ -534,15 +493,15 @@ const AlbumStore = () => {
               <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6">
                 <img
                   src={selectedAlbum.image}
-                  alt={selectedAlbum.title}
+                  alt={selectedAlbum.name}
                   className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border border-gray-700 flex-shrink-0"
                 />
                 <div className="space-y-2 sm:space-y-3 text-left w-full">
                   <div>
                     <p className="text-xs sm:text-sm font-semibold text-gray-300">
-                      Título:
+                      Nombre del álbum:
                     </p>
-                    <p className="text-base sm:text-lg text-white">{selectedAlbum.title}</p>
+                    <p className="text-base sm:text-lg text-white">{selectedAlbum.name}</p>
                   </div>
                   <div>
                     <p className="text-xs sm:text-sm font-semibold text-gray-300">Artista:</p>
@@ -557,34 +516,33 @@ const AlbumStore = () => {
                     <p className="text-base sm:text-lg text-white">{selectedAlbum.genre}</p>
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Precio:</p>
-                    <p className="text-base sm:text-lg text-[#00FF8C]">€{selectedAlbum.price.toFixed(2)}</p>
-                  </div>
-                  {/* Additional album details */}
-                  <div>
                     <p className="text-xs sm:text-sm font-semibold text-gray-300">Canciones:</p>
                     <p className="text-base sm:text-lg text-white">{selectedAlbum.details.tracks}</p>
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Estado:</p>
-                    <p className="text-base sm:text-lg text-white">{selectedAlbum.details.status}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Duración:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedAlbum.details.duration}</p>
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Calidad:</p>
-                    <p className="text-base sm:text-lg text-white">{selectedAlbum.details.quality}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Formato:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedAlbum.details.format}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Discográfica:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedAlbum.details.label}</p>
                   </div>
                 </div>
               </div>
               <div className="flex justify-center mt-6">
                 <motion.button
-                  onClick={handleAddToCart}
+                  onClick={handleAcquireAlbum}
                   className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-2 px-5 sm:py-3 sm:px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group text-sm sm:text-base"
                   variants={buttonVariants}
                   whileHover="hover"
                   whileTap="tap"
                 >
                   <FiShoppingCart className="group-hover:translate-y-0.5 transition-transform" />
-                  Añadir al carrito
+                  Adquirir
                 </motion.button>
               </div>
             </div>
