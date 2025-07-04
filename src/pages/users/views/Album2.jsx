@@ -11,7 +11,7 @@ const initialAlbums = [
     year: 2023,
     genre: "Pop",
     price: 109.26,
-    image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Bryan_Adams_-_So_Happy_It_Hurts.png/220px-Bryan_Adams_-_So_Happy_It_Hurts.png",
+    image: "https://i.scdn.co/image/ab67616d0000b27379444b7e1f30ee546f05d8eb",
     details: {
       tracks: 12,
       duration: "45 min",
@@ -26,7 +26,7 @@ const initialAlbums = [
     year: 2023,
     genre: "Pop",
     price: 24.42,
-    image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Bryan_Adams_-_So_Happy_It_Hurts.png/220px-Bryan_Adams_-_So_Happy_It_Hurts.png",
+    image: "https://cdn-images.dzcdn.net/images/cover/e205344f947ecddaf04f2230fc1cb6ad/0x1900-000000-80-0-0.jpg",
     details: {
       tracks: 10,
       duration: "38 min",
@@ -41,7 +41,7 @@ const initialAlbums = [
     year: 2015,
     genre: "Jazz",
     price: 24.42,
-    image: "https://m.media-amazon.com/images/I/71Hgdo8NI9L.jpg",
+    image: "https://cdn-images.dzcdn.net/images/cover/36d1aa06520e7fc9ce26757a71971d7f/1900x1900-000000-80-0-0.jpg",
     details: {
       tracks: 8,
       duration: "42 min",
@@ -56,7 +56,7 @@ const initialAlbums = [
     year: 2023,
     genre: "Clásica",
     price: 14.50,
-    image: "https://i.scdn.co/image/ab67616d0000b2731d9c6602aa95abd8c12b01b5",
+    image: "https://s.songswave.com/album-images/vol1001/207/207685/1377021-big/Don-T-Be-Scared-cover.jpg",
     details: {
       tracks: 14,
       duration: "52 min",
@@ -71,7 +71,7 @@ const initialAlbums = [
     year: 2010,
     genre: "Estadillo",
     price: 2.00,
-    image: "https://i1.sndcdn.com/artworks-000075914633-6e9z1l-t500x500.jpg",
+    image: "https://i.scdn.co/image/ab67616d00001e02289a226b6c24cb19eeb7a2cd",
     details: {
       tracks: 9,
       duration: "35 min",
@@ -86,7 +86,7 @@ const initialAlbums = [
     year: 2005,
     genre: "Rock",
     price: 17.27,
-    image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Dissection_-_Storm_of_the_Light%27s_Bane.jpg/220px-Dissection_-_Storm_of_the_Light%27s_Bane.jpg",
+    image: "https://i1.sndcdn.com/artworks-000049400990-wezqge-t500x500.jpg",
     details: {
       tracks: 11,
       duration: "48 min",
@@ -101,7 +101,7 @@ const initialAlbums = [
     year: 2007,
     genre: "Clásica",
     price: 20.00,
-    image: "https://i.scdn.co/image/ab67616d0000b2731d9c6602aa95abd8c12b01b5",
+    image: "https://cdn-images.dzcdn.net/images/cover/f15cae20b541646a257bc9cbbb67f3cd/0x1900-000000-80-0-0.jpg",
     details: {
       tracks: 7,
       duration: "40 min",
@@ -116,7 +116,7 @@ const initialAlbums = [
     year: 2004,
     genre: "Rock",
     price: 53.05,
-    image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3e/Ozzy_Osbourne_-_Scream.jpg/220px-Ozzy_Osbourne_-_Scream.jpg",
+    image: "https://cdn-images.dzcdn.net/images/cover/4fcecb51a7eab8370d0c98b471aac088/1900x1900-000000-80-0-0.jpg",
     details: {
       tracks: 12,
       duration: "50 min",
