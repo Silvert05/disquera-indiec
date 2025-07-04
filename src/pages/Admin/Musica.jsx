@@ -25,16 +25,16 @@ import "aos/dist/aos.css";
 const Musica = () => {
   const [canciones, setCanciones] = useState([
     {
-      foto: null,
+      foto: "https://marketplace.canva.com/EAF2uOSjdVU/1/0/1600w/canva-negro-p%C3%BArpura-brillante-%C3%A1cido-brutalista-general-hip-hop-portada-de-%C3%A1lbum-TuLZGoZHXtA.jpg",
       titulo: "Canción 1: El Viaje",
       album: "Descubrimiento",
       duracion: "3:45",
       año: 2020,
       genero: "Rock",
-      estado: true, // true for Activo, false for Inactivo
+      estado: true,
     },
     {
-      foto: null,
+      foto: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/album-cover-song-templates-design-66c8a597c5f8ed4370568005e7344297_screen.jpg?ts=1663427910",
       titulo: "Canción 2: Sueños de Verano",
       album: "Momentos Pop",
       duracion: "4:20",
@@ -43,7 +43,7 @@ const Musica = () => {
       estado: true,
     },
     {
-      foto: null,
+      foto: "https://i.scdn.co/image/ab67616d0000b273c9ab5153619d20949acbd75b",
       titulo: "Jazz Nocturno",
       album: "Luces de la Ciudad",
       duracion: "5:10",
@@ -52,7 +52,7 @@ const Musica = () => {
       estado: true,
     },
     {
-      foto: null,
+      foto: "https://i.scdn.co/image/ab67616d00001e02d903cd3ee0741459aba964bc",
       titulo: "Sinfonía del Bosque",
       album: "Naturaleza Sonora",
       duracion: "7:00",
@@ -61,7 +61,7 @@ const Musica = () => {
       estado: false,
     },
     {
-      foto: null,
+      foto: "https://i.scdn.co/image/ab67616d00001e021473df4204f0dbc75c7c79fc",
       titulo: "Ritmo Electrónico",
       album: "Pulso Urbano",
       duracion: "3:15",
@@ -90,11 +90,9 @@ const Musica = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-
   const [currentCancionIndex, setCurrentCancionIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [errors, setErrors] = useState({});
-
   const [sortOrder, setSortOrder] = useState("asc");
 
   const generos = [
@@ -259,14 +257,14 @@ const Musica = () => {
       text: "¡No podrás revertir esto! La canción será marcada como inactiva.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#EF4444", // Red-500
-      cancelButtonColor: "#6B7280", // Gray-500
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#6B7280",
       confirmButtonText: "Sí, desactivar",
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
         const updatedCanciones = [...canciones];
-        updatedCanciones[index].estado = false; // Set estado to false (Inactivo)
+        updatedCanciones[index].estado = false;
         setCanciones(updatedCanciones);
 
         Swal.fire({
@@ -281,7 +279,7 @@ const Musica = () => {
 
   const handleRestoreCancion = (index) => {
     const updatedCanciones = [...canciones];
-    updatedCanciones[index].estado = true; // Set estado to true (Activo)
+    updatedCanciones[index].estado = true;
     setCanciones(updatedCanciones);
 
     Swal.fire({
@@ -336,7 +334,6 @@ const Musica = () => {
       }
     });
 
-  // Framer Motion Variants for this component
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -385,12 +382,11 @@ const Musica = () => {
       data-aos-easing="linear"
       data-aos-duration="2000"
     >
-      {/* Background Animated Gradient */}
       <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
           background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                           radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+                       radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
           backgroundSize: "200% 200%",
           animation: "bg-pan 20s ease infinite",
         }}
@@ -409,17 +405,12 @@ const Musica = () => {
           }
         }
         .glass-card {
-          background-color: rgba(
-            255,
-            255,
-            255,
-            0.05
-          ); /* Semi-transparent blanco */
+          background-color: rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(15px) saturate(180%);
-          -webkit-backdrop-filter: blur(15px) saturate(180%); /* Safari support */
-          border: 1px solid rgba(255, 255, 255, 0.1); /* Borde más sutil */
+          -webkit-backdrop-filter: blur(15px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-          border-radius: 1.5rem; /* rounded-3xl */
+          border-radius: 1.5rem;
         }
         .custom-scrollbar::-webkit-scrollbar {
           height: 8px;
@@ -430,26 +421,20 @@ const Musica = () => {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #00ff8c; /* Verde Eléctrico */
+          background: #00ff8c;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #39ff14; /* Verde Neón */
+          background: #39ff14;
         }
-        /* Table specific styling for dark glassmorphism */
         .glass-table-header {
-          background-color: rgba(0, 255, 140, 0.2); /* Verde esmeralda sutil */
+          background-color: rgba(0, 255, 140, 0.2);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
           border-bottom: 1px solid rgba(0, 255, 140, 0.3);
         }
         .glass-table-row {
-          background-color: rgba(
-            255,
-            255,
-            255,
-            0.03
-          ); /* Fondo de fila más sutil */
+          background-color: rgba(255, 255, 255, 0.03);
         }
         .glass-table-row:hover {
           background-color: rgba(255, 255, 255, 0.08);
@@ -457,7 +442,6 @@ const Musica = () => {
       `}</style>
 
       <div className="relative z-10">
-        {/* Encabezado - Hero Section */}
         <motion.div
           className="glass-card p-8 mb-8 shadow-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between"
           initial={{ opacity: 0, y: -50 }}
@@ -495,7 +479,6 @@ const Musica = () => {
           </motion.button>
         </motion.div>
 
-        {/* Migas de pan */}
         <motion.div
           className="glass-card p-4 mb-8 flex items-center justify-center"
           variants={itemVariants}
@@ -506,7 +489,6 @@ const Musica = () => {
         >
           <nav aria-label="breadcrumb">
             <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center items-center text-gray-100">
-              {" "}
               <li>
                 <Link
                   to="/dashboard"
@@ -527,7 +509,6 @@ const Musica = () => {
           </nav>
         </motion.div>
 
-        {/* Contenedor de búsqueda y exportar */}
         <motion.div
           className="glass-card p-6 mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4"
           variants={itemVariants}
@@ -570,7 +551,6 @@ const Musica = () => {
           </div>
         </motion.div>
 
-        {/* Tabla de canciones */}
         <motion.div
           className="glass-card p-6 overflow-x-auto custom-scrollbar"
           variants={itemVariants}
@@ -607,9 +587,9 @@ const Musica = () => {
                       className="border-b border-gray-700 glass-table-row"
                     >
                       <td className="py-4 px-6">
-                        {cancion.foto instanceof File ? (
+                        {cancion.foto ? (
                           <img
-                            src={URL.createObjectURL(cancion.foto)}
+                            src={typeof cancion.foto === 'string' ? cancion.foto : URL.createObjectURL(cancion.foto)}
                             alt="Foto de canción"
                             className="w-16 h-16 object-cover rounded-md shadow-md border-2 border-[#00FF8C]"
                           />
@@ -644,7 +624,7 @@ const Musica = () => {
                           <motion.button
                             className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
                             style={{
-                              backgroundColor: "#8B5CF6", // Purple-500
+                              backgroundColor: "#8B5CF6",
                               boxShadow: "0 4px 10px rgba(139, 92, 246, 0.6)",
                             }}
                             whileTap={{ scale: 0.9 }}
@@ -656,7 +636,7 @@ const Musica = () => {
                           <motion.button
                             className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
                             style={{
-                              backgroundColor: "#EAB308", // Yellow-500
+                              backgroundColor: "#EAB308",
                               boxShadow: "0 4px 10px rgba(234, 179, 8, 0.6)",
                             }}
                             whileTap={{ scale: 0.9 }}
@@ -671,7 +651,7 @@ const Musica = () => {
                             <motion.button
                               className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
                               style={{
-                                backgroundColor: "#EF4444", // Red-500
+                                backgroundColor: "#EF4444",
                                 boxShadow: "0 4px 10px rgba(239, 68, 68, 0.6)",
                               }}
                               whileTap={{ scale: 0.9 }}
@@ -686,7 +666,7 @@ const Musica = () => {
                             <motion.button
                               className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
                               style={{
-                                backgroundColor: "#22C55E", // Green-500
+                                backgroundColor: "#22C55E",
                                 boxShadow: "0 4px 10px rgba(34, 197, 94, 0.6)",
                               }}
                               whileTap={{ scale: 0.9 }}
@@ -715,7 +695,6 @@ const Musica = () => {
         </motion.div>
       </div>
 
-      {/* Modales */}
       <AnimatePresence>
         {modalCrear && (
           <ModalFormulario
@@ -766,6 +745,8 @@ const ModalFormulario = ({
       setPreviewFotoUrl(objectUrl);
 
       return () => URL.revokeObjectURL(objectUrl);
+    } else if (typeof formData.foto === 'string') {
+      setPreviewFotoUrl(formData.foto);
     } else {
       setPreviewFotoUrl(null);
     }
@@ -824,7 +805,7 @@ const ModalFormulario = ({
                 className="mx-auto w-28 h-28 object-cover rounded-md border-3 border-[#00FF8C] shadow-md transition-all duration-300 transform hover:scale-105"
               />
               <p className="text-gray-300 text-sm mt-2 font-medium">
-                {formData.foto?.name || "Archivo seleccionado"}
+                {formData.foto?.name || "Imagen seleccionada"}
               </p>
             </div>
           )}
@@ -949,19 +930,6 @@ const ModalFormulario = ({
 };
 
 const ModalVer = ({ cancion, onClose }) => {
-  const [previewFotoUrl, setPreviewFotoUrl] = useState(null);
-
-  useEffect(() => {
-    if (cancion && cancion.foto instanceof File) {
-      const objectUrl = URL.createObjectURL(cancion.foto);
-      setPreviewFotoUrl(objectUrl);
-
-      return () => URL.revokeObjectURL(objectUrl);
-    } else {
-      setPreviewFotoUrl(null);
-    }
-  }, [cancion]);
-
   if (!cancion) return null;
 
   return (
@@ -987,9 +955,9 @@ const ModalVer = ({ cancion, onClose }) => {
         </h2>
         <div className="space-y-4">
           <div className="flex justify-center mb-4">
-            {previewFotoUrl ? (
+            {cancion.foto ? (
               <img
-                src={previewFotoUrl}
+                src={typeof cancion.foto === 'string' ? cancion.foto : URL.createObjectURL(cancion.foto)}
                 alt="Foto de canción"
                 className="w-32 h-32 object-cover rounded-md shadow-lg border-2 border-[#00FF8C]"
               />
@@ -1072,7 +1040,7 @@ ModalFormulario.propTypes = {
 };
 
 ModalVer.propTypes = {
-  cancion: PropTypes.object, // Can be null if modal is not open
+  cancion: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };
 

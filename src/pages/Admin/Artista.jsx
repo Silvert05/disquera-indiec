@@ -31,7 +31,7 @@ const Artistas = () => {
 
   const [artistas, setArtistas] = useState([
     {
-      foto: "https://via.placeholder.com/150/059669/ffffff?text=Artista1", // Simulated URL
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYRoSMJk9DH7ExNNmdJHkVx1No7TVknivCig&s", // Simulated URL
       nombre: "Artista 1",
       genero: "Rock",
       pais: "México",
@@ -40,7 +40,7 @@ const Artistas = () => {
       estado: true,
     },
     {
-      foto: "https://via.placeholder.com/150/047857/ffffff?text=Artista2", // Simulated URL
+      foto: "https://www.rockandpop.cl/wp-content/uploads/2023/03/Taylor-Swift-GettyImages-1425749502-web-768x432.jpg", // Simulated URL
       nombre: "Artista 2",
       genero: "Pop",
       pais: "Estados Unidos",
@@ -49,7 +49,7 @@ const Artistas = () => {
       estado: true,
     },
     {
-      foto: "https://via.placeholder.com/150/10B981/ffffff?text=CantanteA", // Simulated URL
+      foto: "https://i0.wp.com/www.periodismo.com/wp-content/subid/Quienes-son-los-musicos-mas-escuchados-del-mundo-scaled.jpg?fit=959%2C1200&ssl=1", // Simulated URL
       nombre: "Cantante A",
       genero: "Indie",
       pais: "Canadá",
@@ -58,7 +58,7 @@ const Artistas = () => {
       estado: true,
     },
     {
-      foto: "https://via.placeholder.com/150/6B7280/ffffff?text=BandaB", // Simulated URL
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlGw8IttRxLM5-MKJVpOt90pIdTV-0lHsfXQ&s", // Simulated URL
       nombre: "Banda B",
       genero: "Metal",
       pais: "Alemania",
@@ -67,7 +67,7 @@ const Artistas = () => {
       estado: false,
     },
     {
-      foto: "https://via.placeholder.com/150/059669/ffffff?text=SolistaC", // Simulated URL
+      foto: "https://los40.com.ar/los40/imagenes/2017/12/29/musica/1514554255_620849_1514554626_gigante_normal.jpg", // Simulated URL
       nombre: "Solista C",
       genero: "Electrónica",
       pais: "Francia",
@@ -76,7 +76,7 @@ const Artistas = () => {
       estado: true,
     },
     {
-      foto: "https://via.placeholder.com/150/047857/ffffff?text=DuoD", // Simulated URL
+      foto: "https://www.portafolio.co/files/article_multimedia/files/crop/uploads/2016/10/27/58123c90e56fa.r_1477592368304.173-0-592-315.jpeg", // Simulated URL
       nombre: "Dúo D",
       genero: "Folk",
       pais: "Irlanda",

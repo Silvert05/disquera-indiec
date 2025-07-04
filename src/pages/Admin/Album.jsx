@@ -29,7 +29,7 @@ const Album = () => {
   const [albums, setAlbums] = useState([
     {
       id: 1,
-      foto: null,
+      foto: "data:image/jpeg;base64,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", // Simulated URL
       titulo: "Álbum 1",
       artista: "Artista 1",
       año: 2020,
@@ -38,7 +38,7 @@ const Album = () => {
     },
     {
       id: 2,
-      foto: null,
+      foto: "https://cdn.venngage.com/template/thumbnail/full/bf008bfe-9bf6-4511-b795-e86f070bfff5.webp", // Simulated URL
       titulo: "Álbum 2",
       artista: "Artista 2",
       año: 2021,
@@ -47,7 +47,7 @@ const Album = () => {
     },
     {
       id: 3,
-      foto: null,
+      foto: "https://cdn.venngage.com/template/thumbnail/full/679bf7bb-2170-4d54-9485-240baa4ae33c.webp", // Simulated URL
       titulo: "Álbum 3",
       artista: "Artista 3",
       año: 2019,
@@ -56,7 +56,7 @@ const Album = () => {
     },
     {
       id: 4,
-      foto: null,
+      foto: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/modern-album-cover-design-template-a8927597817931fa1842a07c8a7dc343_screen.jpg?ts=1566580267", // Simulated URL
       titulo: "Gran Éxitos",
       artista: "Cantante A",
       año: 2022,
@@ -65,7 +65,7 @@ const Album = () => {
     },
     {
       id: 5,
-      foto: null,
+      foto: "https://storage.ko-fi.com/cdn/useruploads/display/c16851d0-a922-4938-805d-f39060a02870_20220714_173829_%D9%A0%D9%A0%D9%A0%D9%A0.jpg", // Simulated URL
       titulo: "Sonidos Profundos",
       artista: "Banda B",
       año: 2018,
@@ -74,7 +74,7 @@ const Album = () => {
     },
     {
       id: 6,
-      foto: null,
+      foto: "https://coverartworks.com/wp-content/uploads/2024/03/fountion-220x220.jpg", // Simulated URL
       titulo: "Ritmos Nocturnos",
       artista: "Solista C",
       año: 2023,
@@ -83,7 +83,7 @@ const Album = () => {
     },
     {
       id: 7,
-      foto: null,
+      foto: "https://coverartworks.com/wp-content/uploads/2023/07/Celestial-Arrival-750-jpg-webp.webp", // Simulated URL
       titulo: "Ecos de la Montaña",
       artista: "Dúo D",
       año: 2017,
