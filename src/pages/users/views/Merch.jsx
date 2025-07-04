@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSearch, FiShoppingCart, FiX } from "react-icons/fi";
+import { FiSearch, FiShoppingCart, FiX, FiFilter } from "react-icons/fi";
 
-// Datos de ejemplo para los productos de merch (ampliados con más detalles)
+// Datos de productos
 const initialProducts = [
   {
     id: 1,
     name: "Camisa Negra Con Diseño",
     artist: "Ago",
     price: 21.39,
-    image: "https://via.placeholder.com/200x250/000000/FFFFFF?text=Camisa+Ago",
+    image: "https://i.etsystatic.com/9923777/r/il/cc5930/3101976038/il_570xN.3101976038_j5gb.jpg",
     details: {
       size: "L",
       color: "Negro",
@@ -22,7 +22,7 @@ const initialProducts = [
     name: "Parche para abrigo de la Banda Liberty",
     artist: "Banda Liberty",
     price: 18.45,
-    image: "https://via.placeholder.com/200x250/333333/FFFFFF?text=Parche+Liberty",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV5bSl36522nVt4fFc_jqmdsWGn51nMI3M-w&s",
     details: {
       size: "Única",
       color: "Multicolor",
@@ -35,7 +35,7 @@ const initialProducts = [
     name: "Hoodie de color negro con el estampado de la banda The Rock",
     artist: "The Rock",
     price: 19.45,
-    image: "https://via.placeholder.com/200x250/555555/FFFFFF?text=Hoodie+Rock",
+    image: "https://img.joomcdn.net/3f66adf53ef47353c13b2ec8c57efc0210159d9a_original.jpeg",
     details: {
       size: "M",
       color: "Negro",
@@ -48,7 +48,7 @@ const initialProducts = [
     name: "Taza De La Banda Metallica",
     artist: "Metallica",
     price: 12.00,
-    image: "https://via.placeholder.com/200x250/777777/FFFFFF?text=Taza+Metallica",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYJqm5jlU6uBJt-mETtRADh4oAAkYHfGnqBA&s",
     details: {
       size: "Estándar",
       color: "Negro",
@@ -61,7 +61,7 @@ const initialProducts = [
     name: "Mochila pequeña de Pink Floyd",
     artist: "Pink Floyd",
     price: 23.84,
-    image: "https://via.placeholder.com/200x250/AAAAAA/FFFFFF?text=Mochila+PF",
+    image: "https://http2.mlstatic.com/D_650478-MLM70642867549_072023-O.jpg",
     details: {
       size: "Pequeña",
       color: "Rosa y Negro",
@@ -74,7 +74,7 @@ const initialProducts = [
     name: "Pulseras de Los BTS con sus firmas",
     artist: "BTS",
     price: 28.24,
-    image: "https://via.placeholder.com/200x250/BBBBBB/FFFFFF?text=Pulseras+BTS",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDpUZAsfCaatqg-eB8TYLthpFCdYlnhYlmsQ&s",
     details: {
       size: "Única",
       color: "Variados",
@@ -87,7 +87,7 @@ const initialProducts = [
     name: "Álbum Firmado por la Artista Dua Lipa",
     artist: "Dua Lipa",
     price: 21.39,
-    image: "https://via.placeholder.com/200x250/CCCCCC/FFFFFF?text=Album+Dua+Lipa",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7PMPnz0h6xfZuyzsDEs81ZSPj65qFgzWOFA&s",
     details: {
       size: "CD",
       color: "N/A",
@@ -100,7 +100,7 @@ const initialProducts = [
     name: "Skate Firmado por la banda The Sleeping",
     artist: "The Sleeping",
     price: 33.45,
-    image: "https://via.placeholder.com/200x250/DDDDDD/FFFFFF?text=Skate+Sleeping",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEarlr7qfkdNzJcRFGOeD_ep3yPxWRnMXkQzj9HQvYO2yQ0NNBA-U5Zy9iVvPNBTQPkKM&usqp=CAU",
     details: {
       size: "Estándar",
       color: "Negro",
@@ -108,13 +108,12 @@ const initialProducts = [
       material: "Madera de Arce",
     },
   },
-  // Más productos para llenar la vista y hacer el scroll visible
   {
     id: 9,
     name: "Poster Gigante de Bryan Adams",
     artist: "Bryan Adams",
     price: 15.00,
-    image: "https://via.placeholder.com/200x250/111111/FFFFFF?text=Poster+Adams",
+    image: "https://i.ebayimg.com/images/g/S8MAAOSw-jhUBAR0/s-l1200.jpg",
     details: {
       size: "A1",
       color: "Color",
@@ -127,7 +126,7 @@ const initialProducts = [
     name: "Vaso Coleccionable Tornado",
     artist: "Tornado",
     price: 9.99,
-    image: "https://via.placeholder.com/200x250/222222/FFFFFF?text=Vaso+Tornado",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgRwdY17aP9vzQYFvigobxhlcvx-V8t-r3Cg&s",
     details: {
       size: "Única",
       color: "Transparente",
@@ -140,7 +139,7 @@ const initialProducts = [
     name: "Libreta de Azuzena",
     artist: "Azuzena",
     price: 7.50,
-    image: "https://via.placeholder.com/200x250/444444/FFFFFF?text=Libreta+Azuzena",
+    image: "https://m.media-amazon.com/images/I/71Hgdo8NI9L.jpg",
     details: {
       size: "A5",
       color: "Rosa",
@@ -153,7 +152,7 @@ const initialProducts = [
     name: "Púas de guitarra Gerardo",
     artist: "Gerardo",
     price: 5.00,
-    image: "https://via.placeholder.com/200x250/666666/FFFFFF?text=Puas+Gerardo",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTntAcANwjMWmPJ1VKBHPvS0rQSZxYp3UUloA&s",
     details: {
       size: "Variado",
       color: "Negro, Blanco",
@@ -185,17 +184,31 @@ const MerchStore = () => {
   const [modalDetailsOpen, setModalDetailsOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      // Cerrar el sidebar de filtros si la pantalla es grande
+      if (window.innerWidth >= 768) {
+        setIsFilterSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Lógica de filtrado de artistas mejorada
   const handleArtistFilterChange = (artist) => {
     setSelectedArtists((prev) =>
       prev.includes(artist)
-        ? prev.filter((a) => a !== artist) // Si ya está, lo quita
-        : [...prev, artist] // Si no está, lo añade
+        ? prev.filter((a) => a !== artist)
+        : [...prev, artist]
     );
   };
 
@@ -210,28 +223,24 @@ const MerchStore = () => {
   };
 
   const handleAcquireProduct = () => {
-    closeDetailsModal(); // Cerrar el modal de detalles
-    setModalSuccessOpen(true); // Abrir el modal de éxito
+    closeDetailsModal();
+    setModalSuccessOpen(true);
     setTimeout(() => {
-      setModalSuccessOpen(false); // Cerrar el modal de éxito después de un tiempo
+      setModalSuccessOpen(false);
     }, 1500);
   };
 
-  // **Lógica de filtrado combinada para productos**
   const filteredProducts = initialProducts.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
-    // Si no hay artistas seleccionados, se muestran todos los productos,
-    // de lo contrario, solo los de los artistas seleccionados.
     const matchesArtist =
       selectedArtists.length === 0 || selectedArtists.includes(product.artist);
 
     return matchesSearch && matchesArtist;
   });
 
-  // Framer Motion Variants (adaptados del código de Usuarios.jsx)
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -272,25 +281,36 @@ const MerchStore = () => {
 
   const modalVariants = {
     hidden: { scale: 0.8, opacity: 0 },
-    visible: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 150, damping: 12 } },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 150, damping: 12 },
+    },
     exit: { scale: 0.8, opacity: 0, transition: { duration: 0.2 } },
   };
 
+  const filterSidebarVariants = {
+    hidden: { x: "-100%" },
+    visible: { x: "0%", transition: { type: "spring", stiffness: 120, damping: 14 } },
+    exit: { x: "-100%", transition: { duration: 0.3 } },
+  };
+
   return (
-    <div className="flex bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen relative overflow-hidden">
+    <div className="flex flex-col bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen relative overflow-hidden pt-16 md:ml-72">
       {/* Background Animated Gradient */}
       <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
-          background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                        radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+          background: `
+            radial-gradient(circle at top left, #39FF14 0%, transparent 30%),
+            radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)
+          `,
           backgroundSize: "200% 200%",
           animation: "bg-pan 20s ease infinite",
         }}
       ></div>
 
-      {/* Estilos CSS personalizados (adaptados del código de Usuarios.jsx) */}
-      <style jsx>{`
+      <style jsx global>{`
         @keyframes bg-pan {
           0% {
             background-position: 0% 0%;
@@ -303,17 +323,12 @@ const MerchStore = () => {
           }
         }
         .glass-card {
-          background-color: rgba(
-            255,
-            255,
-            255,
-            0.05
-          ); /* Semi-transparent blanco */
+          background-color: rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(15px) saturate(180%);
-          -webkit-backdrop-filter: blur(15px) saturate(180%); /* Safari support */
-          border: 1px solid rgba(255, 255, 255, 0.1); /* Borde más sutil */
+          -webkit-backdrop-filter: blur(15px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-          border-radius: 1.5rem; /* rounded-3xl */
+          border-radius: 1.5rem;
         }
         .custom-scrollbar::-webkit-scrollbar {
           height: 8px;
@@ -324,18 +339,85 @@ const MerchStore = () => {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #00ff8c; /* Verde Eléctrico */
+          background: #00ff8c;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #39ff14; /* Verde Neón */
+          background: #39ff14;
         }
       `}</style>
 
-      <div className="relative z-10 flex w-full">
-        {/* Sidebar de filtros */}
+      {/* Filter button for mobile/tablet */}
+      {windowWidth < 768 && (
+        <div className="fixed top-20 right-4 z-40">
+          <motion.button
+            onClick={() => setIsFilterSidebarOpen(!isFilterSidebarOpen)}
+            className="bg-[#00FF8C] text-gray-900 p-3 rounded-full shadow-lg"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FiFilter size={24} />
+          </motion.button>
+        </div>
+      )}
+
+      {/* Filter sidebar for mobile */}
+      <AnimatePresence>
+        {isFilterSidebarOpen && windowWidth < 768 && (
+          <motion.div
+            className="fixed top-0 left-0 h-screen w-full max-w-xs bg-gray-950 p-6 z-50 overflow-y-auto custom-scrollbar"
+            variants={filterSidebarVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <div className="flex justify-between items-center mb-6 pt-4">
+              <h2 className="text-2xl font-bold text-white">Filtros</h2>
+              <button
+                onClick={() => setIsFilterSidebarOpen(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <FiX size={28} />
+              </button>
+            </div>
+            <div className="relative mb-6">
+              <input
+                type="text"
+                placeholder="Buscar Producto..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="glass-card bg-transparent border border-gray-700 p-3 pl-10 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
+              />
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            </div>
+
+            <h2 className="text-xl font-bold mb-4 text-white">Artista</h2>
+            <div className="space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
+              {artists.map((artist) => (
+                <motion.label
+                  key={artist}
+                  className="flex items-center text-gray-300 cursor-pointer"
+                  whileHover={{ x: 5, color: "#00FF8C" }}
+                  transition={{ duration: 0.1 }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedArtists.includes(artist)}
+                    onChange={() => handleArtistFilterChange(artist)}
+                    className="form-checkbox h-5 w-5 text-[#00FF8C] bg-gray-700 border-gray-600 rounded focus:ring-[#00FF8C] mr-2"
+                  />
+                  {artist}
+                </motion.label>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Filter sidebar for desktop */}
+      {windowWidth >= 768 && (
         <motion.div
-          className="w-64 p-6 glass-card m-6 flex-shrink-0 custom-scrollbar overflow-y-auto max-h-[calc(100vh-48px)]"
+          className="hidden md:block fixed top-16 left-0 md:left-72 h-[calc(100vh-4rem)] w-72 p-6 glass-card m-6 flex-shrink-0 custom-scrollbar overflow-y-auto z-30"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, type: "spring", stiffness: 120, damping: 14 }}
@@ -351,8 +433,8 @@ const MerchStore = () => {
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
 
-          <h2 className="text-2xl font-bold mb-6 text-white">Artista</h2>
-          <div className="space-y-3">
+          <h2 className="text-xl font-bold mb-4 text-white">Artista</h2>
+          <div className="space-y-3 max-h-[calc(100vh-18rem)] overflow-y-auto custom-scrollbar">
             {artists.map((artist) => (
               <motion.label
                 key={artist}
@@ -371,41 +453,42 @@ const MerchStore = () => {
             ))}
           </div>
         </motion.div>
+      )}
 
-        {/* Contenido principal de la tienda */}
-        <div className="flex-1 p-8">
-          {/* Grid de productos */}
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 custom-scrollbar overflow-y-auto max-h-[calc(100vh-48px)] pr-2"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <AnimatePresence>
-              {filteredProducts.map((product) => (
+      {/* Main content */}
+      <div className="flex-1 p-4 sm:p-6 md:ml-[calc(18rem+1.5rem)]">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <AnimatePresence>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
                 <motion.div
                   key={product.id}
                   className="glass-card p-4 flex flex-col items-center text-center relative overflow-hidden cursor-pointer"
                   variants={itemVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  layout // Importante para animar los cambios de layout (filtrado)
+                  layout
                   onClick={() => openDetailsModal(product)}
                 >
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-40 object-cover mb-4 rounded-lg border border-gray-700"
+                    className="w-full h-48 sm:h-56 object-cover mb-4 rounded-lg border border-gray-700"
                   />
-                  <h3 className="text-lg font-semibold text-white mb-1">
+                  <h3 className="text-base sm:text-lg font-semibold text-white mb-1 line-clamp-2">
                     {product.name}
                   </h3>
                   <p className="text-gray-400 text-sm mb-2">{product.artist}</p>
-                  <p className="text-xl font-bold text-[#00FF8C] mb-4">
+                  <p className="text-lg sm:text-xl font-bold text-[#00FF8C] mb-4">
                     ${product.price.toFixed(2)}
                   </p>
                   <motion.button
-                    className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg flex items-center justify-center gap-2 group"
+                    className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-medium sm:font-bold py-2 px-3 sm:py-2 sm:px-4 rounded-full shadow-lg flex items-center justify-center gap-2 group text-sm sm:text-base"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
@@ -418,13 +501,18 @@ const MerchStore = () => {
                     Añadir al carrito
                   </motion.button>
                 </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <h3 className="text-xl text-gray-300">No se encontraron productos</h3>
+                <p className="text-gray-500">Intenta con otros filtros de búsqueda</p>
+              </div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
-      {/* Modal de Detalles del Producto */}
+      {/* Product details modal */}
       <AnimatePresence>
         {modalDetailsOpen && selectedProduct && (
           <motion.div
@@ -434,51 +522,51 @@ const MerchStore = () => {
             exit="exit"
             variants={modalVariants}
           >
-            <div className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-md border border-white border-opacity-20 relative">
+            <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-white border-opacity-20 relative">
               <button
                 onClick={closeDetailsModal}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
               >
                 <FiX size={24} />
               </button>
-              <h2 className="text-3xl font-bold mb-6 text-white text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-white text-center">
                 Detalles Del Producto
               </h2>
-              <div className="flex flex-col md:flex-row items-center gap-6 mb-6">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6">
                 <img
                   src={selectedProduct.image}
                   alt={selectedProduct.name}
-                  className="w-32 h-32 object-cover rounded-lg border border-gray-700 flex-shrink-0"
+                  className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border border-gray-700 flex-shrink-0"
                 />
-                <div className="space-y-3 text-left w-full">
+                <div className="space-y-2 sm:space-y-3 text-left w-full">
                   <div>
-                    <p className="text-sm font-semibold text-gray-300">
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">
                       Nombre del producto:
                     </p>
-                    <p className="text-lg text-white">{selectedProduct.name}</p>
+                    <p className="text-base sm:text-lg text-white">{selectedProduct.name}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-300">Talla:</p>
-                    <p className="text-lg text-white">{selectedProduct.details.size}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Talla:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedProduct.details.size}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-300">Color:</p>
-                    <p className="text-lg text-white">{selectedProduct.details.color}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Color:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedProduct.details.color}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-300">Estado:</p>
-                    <p className="text-lg text-white">{selectedProduct.details.status}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Estado:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedProduct.details.status}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-300">Material:</p>
-                    <p className="text-lg text-white">{selectedProduct.details.material}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-300">Material:</p>
+                    <p className="text-base sm:text-lg text-white">{selectedProduct.details.material}</p>
                   </div>
                 </div>
               </div>
               <div className="flex justify-center mt-6">
                 <motion.button
                   onClick={handleAcquireProduct}
-                  className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group"
+                  className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-2 px-5 sm:py-3 sm:px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group text-sm sm:text-base"
                   variants={buttonVariants}
                   whileHover="hover"
                   whileTap="tap"
@@ -492,7 +580,7 @@ const MerchStore = () => {
         )}
       </AnimatePresence>
 
-      {/* Modal de Éxito al Adquirir */}
+      {/* Success modal */}
       <AnimatePresence>
         {modalSuccessOpen && (
           <motion.div
@@ -502,10 +590,10 @@ const MerchStore = () => {
             exit="exit"
             variants={modalVariants}
           >
-            <div className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center border border-white border-opacity-20">
-              <div className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-4">
+            <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center border border-white border-opacity-20">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-4">
                 <svg
-                  className="w-12 h-12 text-white"
+                  className="w-8 h-8 sm:w-12 sm:h-12 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -519,11 +607,11 @@ const MerchStore = () => {
                   ></path>
                 </svg>
               </div>
-              <h2 className="text-3xl font-bold mb-2 text-white">¡Éxito!</h2>
-              <p className="text-lg text-gray-300 mb-6">Artículo añadido a tu carrito</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-white">¡Éxito!</h2>
+              <p className="text-base sm:text-lg text-gray-300 mb-6">Artículo añadido a tu carrito</p>
               <motion.button
                 onClick={() => setModalSuccessOpen(false)}
-                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg"
+                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-2 px-5 sm:py-3 sm:px-6 rounded-full shadow-lg text-sm sm:text-base"
                 variants={buttonVariants}
                 whileHover="hover"
                 whileTap="tap"
