@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react'; // Import useEffect
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
+import AOS from 'aos'; // Import AOS
+import 'aos/dist/aos.css'; // Import AOS styles
 
 export const metadata = {
   viewport: {
@@ -25,38 +27,50 @@ const fadeUp = {
 const Home = () => {
   const scrollRef = useRef(null);
 
+  useEffect(() => {
+    // Initialize AOS
+    AOS.init({
+      once: true, // Animation will only play once
+    });
+  }, []); // Empty dependency array means this runs once on mount
+
   const handleScroll = () => {
-  if (!scrollRef.current) return;
+    if (!scrollRef.current) return;
 
-  const targetPosition = scrollRef.current.getBoundingClientRect().top + window.scrollY;
-  const startPosition = window.scrollY;
-  const distance = targetPosition - startPosition;
-  const duration = 1200; // duración en milisegundos (ajústalo si quieres más lento)
-  let startTime = null;
+    const targetPosition = scrollRef.current.getBoundingClientRect().top + window.scrollY;
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    const duration = 1200; // duración en milisegundos (ajústalo si quieres más lento)
+    let startTime = null;
 
-  const easeInOutCubic = (t) =>
-    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const easeInOutCubic = (t) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-  const animateScroll = (currentTime) => {
-    if (!startTime) startTime = currentTime;
-    const timeElapsed = currentTime - startTime;
-    const progress = Math.min(timeElapsed / duration, 1);
-    const ease = easeInOutCubic(progress);
+    const animateScroll = (currentTime) => {
+      if (!startTime) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      const ease = easeInOutCubic(progress);
 
-    window.scrollTo(0, startPosition + distance * ease);
+      window.scrollTo(0, startPosition + distance * ease);
 
-    if (timeElapsed < duration) {
-      requestAnimationFrame(animateScroll);
-    }
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animateScroll);
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
   };
-
-  requestAnimationFrame(animateScroll);
-};
 
 
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden pl-0 md:pl-72 transition-all">
+    <div
+      className="min-h-screen bg-black text-white font-sans overflow-x-hidden pl-0 md:pl-72 transition-all"
+      data-aos="fade-down" // Added AOS animation
+      data-aos-easing="linear"
+      data-aos-duration="1500"
+    >
       {/* HERO SECTION */}
       <section className="relative w-full h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[url('/imgs/bg-humo.png')] bg-cover opacity-10 blur-sm" />

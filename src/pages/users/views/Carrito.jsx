@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaShoppingCart,
@@ -6,6 +6,8 @@ import {
   FaTimesCircle,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import AOS from 'aos'; // Import AOS
+import 'aos/dist/aos.css'; // Import AOS styles
 
 const overlayVariants = {
   hidden: { opacity: 0, backdropFilter: "blur(0px)" },
@@ -60,6 +62,14 @@ const CarritoTabla = () => {
   const [productoAEliminar, setProductoAEliminar] = useState(null);
   const [ventaConfirmada, setVentaConfirmada] = useState(false);
 
+  useEffect(() => {
+    // Initialize AOS
+    AOS.init({
+      once: true, // Animation will only play once
+    });
+  }, []); // Empty dependency array means this runs once on mount
+
+
   const confirmarEliminar = () => {
     setProductos(productos.filter((p) => p.id !== productoAEliminar.id));
     setProductoAEliminar(null);
@@ -72,13 +82,18 @@ const CarritoTabla = () => {
   const total = productos.reduce((sum, p) => sum + p.costo * p.unidades, 0);
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden text-white z-10">
+    <div
+      className="relative min-h-screen bg-black overflow-hidden text-white z-10"
+      data-aos="fade-down" // Added AOS animation
+      data-aos-easing="linear"
+      data-aos-duration="1500"
+    >
       {/* Fondo animado */}
       <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
           background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                       radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+                         radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
           backgroundSize: "200% 200%",
           animation: "bg-pan 20s ease infinite",
         }}

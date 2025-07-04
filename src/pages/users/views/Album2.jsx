@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiShoppingCart, FiMusic, FiX } from "react-icons/fi";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Datos de ejemplo para los álbumes (adaptados de tu imagen)
 const initialAlbums = [
@@ -88,6 +90,12 @@ const AlbumStore = () => {
   const [modalDetailsOpen, setModalDetailsOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+
+  useEffect(() => {
+    AOS.init({
+      once: true,
+    });
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -181,13 +189,18 @@ const AlbumStore = () => {
   };
 
   return (
-    <div className="flex bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen relative overflow-hidden">
+    <div 
+      className="flex bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen relative overflow-hidden"
+      data-aos="fade-down" // Aquí se añade la animación a la div principal
+      data-aos-easing="linear"
+      data-aos-duration="1500"
+    >
       {/* Background Animated Gradient */}
       <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
           background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                      radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+                       radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
           backgroundSize: "200% 200%",
           animation: "bg-pan 20s ease infinite",
         }}
