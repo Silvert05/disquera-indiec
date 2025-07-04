@@ -31,6 +31,10 @@ import {
   FaPlus, // For add button
 } from "react-icons/fa";
 
+// Importaciones de AOS (Animate On Scroll)
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 // Register necessary Chart.js elements
 ChartJS.register(
   ArcElement,
@@ -48,6 +52,14 @@ const AuraFlowDashboard = () => {
   const [currentPlayingSong, setCurrentPlayingSong] = useState(null);
   const scrollRef = useRef(null);
   const audioRef = useRef(null); // Ref for audio element
+
+  // Inicializa AOS cuando el componente se monta
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Duración predeterminada si no se especifica en data-aos-duration
+      once: false,    // La animación se reproducirá cada vez que el elemento entre en la vista
+    });
+  }, []); // El array vacío asegura que se ejecute solo una vez al montar
 
   // Dummy Data
   const statsData = {
@@ -100,7 +112,7 @@ const AuraFlowDashboard = () => {
     ],
   };
 
-  // --- CAMBIO CLAVE: URLs de imágenes actualizadas ---
+  // --- URLs de imágenes actualizadas ---
   const upcomingEvents = [
     {
       id: 1,
@@ -176,7 +188,7 @@ const AuraFlowDashboard = () => {
       audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
     },
   ];
-  // --- FIN CAMBIO CLAVE ---
+  // --- FIN URLs de imágenes ---
 
   useEffect(() => {
     if (audioRef.current) {
@@ -249,10 +261,17 @@ const AuraFlowDashboard = () => {
 
   return (
     // CAMBIO DE COLOR: Fondo principal del dashboard (degradado de grises/negros)
-    <div className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden">
+    // Se agregó la animación AOS: fade-down con easing linear y duration 1500
+    <motion.div
+      transition={{ duration: 1.0, ease: "easeOut" }}
+      className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden"
+      data-aos="fade-down"
+      data-aos-easing="linear"
+      data-aos-duration="1500"
+    >
       {/* Background Animated Gradient (Conceptual - requires more advanced CSS/JS) */}
       {/* CAMBIO DE COLOR: Gradiente animado de fondo (verdes/negros) */}
-      <div className="absolute inset-0 z-0 opacity-20" style={{
+      <div className="absolute inset-0 z-0 opacity-40" style={{
         background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
                      radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
         backgroundSize: '200% 200%',
@@ -343,12 +362,11 @@ const AuraFlowDashboard = () => {
 
 
       <div className="relative z-10">
-        {/* Hero Section */}
-        <motion.div
+       {/* Hero Section */}
+        <div
           className="glass-card p-10 mb-12 shadow-2xl relative overflow-hidden"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, type: "spring", stiffness: 120, damping: 14 }}
+          data-aos="fade-up" // Aquí se cambió a fade-up
+          data-aos-duration="3000" // Y aquí la duración a 3000ms
         >
           {/* Subtle background pattern or image */}
           {/* CAMBIO: La imagen de patrón de fondo debe encajar con la nueva paleta */}
@@ -358,7 +376,18 @@ const AuraFlowDashboard = () => {
               <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
                 Tu Universo Musical,<br />Siempre en Armonía.
               </h1>
-              
+              <p className="text-lg md:text-xl text-gray-200 mb-6 max-w-lg">
+                Organiza géneros, crea grupos, impulsa artistas y lleva tus eventos al siguiente nivel con una experiencia sin igual.
+              </p>
+              <motion.button
+                // CAMBIO DE COLOR: Botón Hero (degradado de verdes)
+                className="bg-gradient-to-r from-green-600 to-lime-500 text-white font-bold py-3 px-8 rounded-full shadow-lg flex items-center group"
+                variants={heroButtonVariants}
+                whileHover="hover"
+                whileTap="tap"
+              >
+                Descubre Ahora <FaArrowRight className="inline-block ml-3 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
             </div>
             {/* Animated SVG/Lottie placeholder for visualizer/album art */}
             <motion.div
@@ -373,7 +402,7 @@ const AuraFlowDashboard = () => {
               {/* Replace with actual Lottie/SVG animation if desired */}
             </motion.div>
           </div>
-        </motion.div>
+          </div>
 
         {/* Key Statistics Section */}
         <motion.div
@@ -665,7 +694,7 @@ const AuraFlowDashboard = () => {
           </div>
         </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

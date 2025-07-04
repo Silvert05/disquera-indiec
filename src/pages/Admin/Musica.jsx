@@ -19,6 +19,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import DOMPurify from "dompurify";
+import AOS from 'aos'; // Importar AOS
+import 'aos/dist/aos.css'; // Importar los estilos de AOS
 
 const Musica = () => {
   const [canciones, setCanciones] = useState([
@@ -111,6 +113,14 @@ const Musica = () => {
     "Indie",
     "Folk",
   ];
+
+  // Inicializar AOS cuando el componente se monta
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Duración por defecto para otros elementos si no se especifica
+      once: false,    // La animación se reproducirá cada vez que el elemento entre en la vista
+    });
+  }, []); // El array vacío asegura que se ejecute solo una vez al montar
 
   const openModalCrear = () => {
     setFormData(initialFormData); // Reiniciar el formulario al abrir modal de creación
@@ -335,7 +345,12 @@ const Musica = () => {
     });
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 min-h-screen font-sans pt-16 md:ml-[20rem] relative overflow-hidden">
+    <div
+      className="p-4 sm:p-6 md:p-8 min-h-screen font-sans pt-16 md:ml-[20rem] relative overflow-hidden"
+      data-aos="fade-down" // Aplicado aquí
+      data-aos-easing="linear" // Aplicado aquí
+      data-aos-duration="2000" // Aplicado aquí
+    >
       {/* Fondo animado de ondas sutiles */}
       <div className="absolute inset-0 z-0 opacity-20">
         <div className="wave-bg"></div>
@@ -835,74 +850,58 @@ const ModalVer = ({ cancion, onClose }) => {
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center text-emerald-700">
           Detalles de la Canción
         </h2>
-
-        <div className="mb-4 text-center">
-          {previewFotoUrl ? ( // Usar previewFotoUrl aquí
+        <div className="mb-6 text-center">
+          {previewFotoUrl ? (
             <img
               src={previewFotoUrl}
               alt="Foto de canción"
-              className="mx-auto w-32 h-32 object-cover rounded-md border-4 border-emerald-500 shadow-lg transition-all duration-300 transform hover:scale-105"
+              className="mx-auto w-32 h-32 object-cover rounded-md shadow-md border-3 border-emerald-400 transition-all duration-300 transform hover:scale-105"
             />
           ) : (
-            <div className="mx-auto w-32 h-32 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 text-sm font-semibold border-4 border-gray-300">
+            <div className="mx-auto w-32 h-32 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 text-sm font-semibold border-3 border-gray-300">
               Sin Foto
             </div>
           )}
         </div>
-
         <div className="space-y-4 text-gray-700">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-0.5">
-              Título:
-            </label>
-            <p className="text-gray-900 text-lg font-medium">
-              {cancion.titulo}
-            </p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-0.5">
-              Álbum:
-            </label>
-            <p className="text-gray-800">{cancion.album}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-0.5">
-              Duración:
-            </label>
-            <p className="text-gray-800">{cancion.duracion}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-0.5">
-              Año:
-            </label>
-            <p className="text-gray-800">{cancion.año}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-0.5">
-              Género:
-            </label>
-            <p className="text-gray-800">{cancion.genero}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-0.5">
-              Estado:
-            </label>
+          <p className="flex items-center gap-2">
+            <FiMusic className="text-emerald-600" size={20} />
+            <strong className="text-gray-800">Título:</strong> {cancion.titulo}
+          </p>
+          <p className="flex items-center gap-2">
+            <FiDisc className="text-emerald-600" size={20} />
+            <strong className="text-gray-800">Álbum:</strong> {cancion.album}
+          </p>
+          <p className="flex items-center gap-2">
+            <FiClock className="text-emerald-600" size={20} />
+            <strong className="text-gray-800">Duración:</strong>{" "}
+            {cancion.duracion}
+          </p>
+          <p className="flex items-center gap-2">
+            <FiCalendar className="text-emerald-600" size={20} />
+            <strong className="text-gray-800">Año:</strong> {cancion.año}
+          </p>
+          <p className="flex items-center gap-2">
+            <FiTag className="text-emerald-600" size={20} />
+            <strong className="text-gray-800">Género:</strong> {cancion.genero}
+          </p>
+          <p className="flex items-center gap-2">
+            <strong className="text-gray-800">Estado:</strong>{" "}
             <span
-              className={`px-4 py-1 rounded-full text-sm font-semibold ${
+              className={`px-3 py-1 rounded-full text-sm font-semibold ${
                 cancion.estado
                   ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
+                  : "bg-gray-100 text-gray-800"
               }`}
             >
               {cancion.estado ? "Activo" : "Inactivo"}
             </span>
-          </div>
+          </p>
         </div>
-
         <div className="flex justify-end mt-8">
           <motion.button
             onClick={onClose}
-            className="px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 shadow-md hover:shadow-lg transition-all duration-200 transform-gpu focus:outline-none focus:ring-4 focus:ring-emerald-400 focus:ring-opacity-50"
+            className="px-6 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 shadow-md hover:shadow-lg transition-all duration-200 transform-gpu focus:outline-none focus:ring-4 focus:ring-red-400 focus:ring-opacity-50"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -914,6 +913,7 @@ const ModalVer = ({ cancion, onClose }) => {
   );
 };
 
+// PropTypes for validation
 ModalFormulario.propTypes = {
   formData: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -924,7 +924,7 @@ ModalFormulario.propTypes = {
 };
 
 ModalVer.propTypes = {
-  cancion: PropTypes.object, // 'object' instead of 'object.isRequired' as it can be null initially
+  cancion: PropTypes.object, // Can be null initially
   onClose: PropTypes.func.isRequired,
 };
 

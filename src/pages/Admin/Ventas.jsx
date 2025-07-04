@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiEye, FiFilter, FiDownload } from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
-import DOMPurify from "dompurify"; // Librería para sanitizar entradas y prevenir XSS
+import DOMPurify from "dompurify";
 
 const Ventas = () => {
   const [ventas] = useState([
@@ -50,9 +50,8 @@ const Ventas = () => {
     },
   ]);
 
-  // Función para sanitizar entradas usando DOMPurify
   const sanitizeInput = (input) => {
-    return DOMPurify.sanitize(input); // Sanitiza el input para prevenir XSS
+    return DOMPurify.sanitize(input);
   };
 
   const [modalVer, setModalVer] = useState(false);
@@ -109,8 +108,8 @@ const Ventas = () => {
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 100,
-        damping: 10,
+        stiffness: 50, // CAMBIO: Menor rigidez para animación más lenta
+        damping: 15,   // CAMBIO: Mayor amortiguamiento para animación más suave
       },
     },
     hover: {
@@ -131,13 +130,18 @@ const Ventas = () => {
   };
 
   return (
-    <div className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden">
+    <motion.div
+      className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden"
+      initial={{ y: -50 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
+    >
       {/* Background Animated Gradient */}
       <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
           background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                     radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+                      radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
           backgroundSize: "200% 200%",
           animation: "bg-pan 20s ease infinite",
         }}
@@ -210,10 +214,9 @@ const Ventas = () => {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            duration: 0.8,
             type: "spring",
-            stiffness: 120,
-            damping: 14,
+            stiffness: 50, // CAMBIO: Rigidez reducida para mayor lentitud
+            damping: 20,   // CAMBIO: Amortiguamiento aumentado para mayor suavidad
           }}
         >
           <div
@@ -227,7 +230,6 @@ const Ventas = () => {
             <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-lg">
               Registro de Ventas
             </h1>
-           
           </div>
         </motion.div>
 
@@ -241,7 +243,8 @@ const Ventas = () => {
           transition={{ delay: 0.2 }}
         >
           <nav aria-label="breadcrumb">
-            <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center items-center">
+            <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center items-center text-gray-100">
+              {" "}
               <li>
                 <Link
                   to="/dashboard"
@@ -332,9 +335,15 @@ const Ventas = () => {
                   className="border-b border-gray-700 glass-table-row"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 * index }}
+                  transition={{
+                    duration: 0.6, // CAMBIO: Añadida duración para cada fila
+                    ease: "easeOut",
+                    delay: 0.08 * index, // CAMBIO: Aumentado el retraso entre filas
+                  }}
                 >
-                  <td className="py-4 px-6 whitespace-nowrap">{venta.fecha}</td>
+                  <td className="py-4 px-6 whitespace-nowrap">
+                    {venta.fecha}
+                  </td>
                   <td className="py-4 px-6 whitespace-nowrap">
                     {venta.albumCancion}
                   </td>
@@ -360,8 +369,8 @@ const Ventas = () => {
                       onClick={() => openModalVer(index)}
                       className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
                       style={{
-                        backgroundColor: "#8B5CF6", // Morado
-                        boxShadow: "0 4px 10px rgba(139, 92, 246, 0.6)", // Sombra morada
+                        backgroundColor: "#8B5CF6",
+                        boxShadow: "0 4px 10px rgba(139, 92, 246, 0.6)",
                       }}
                     >
                       <FiEye size={20} />
@@ -374,23 +383,34 @@ const Ventas = () => {
         </motion.div>
 
         {/* Modal de Ver */}
-        {modalVer && (
-          <ModalVer data={ventas[currentVenta]} onClose={closeModalVer} />
-        )}
+        <AnimatePresence>
+          {modalVer && (
+            <ModalVer data={ventas[currentVenta]} onClose={closeModalVer} />
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 const ModalVer = ({ data, onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4">
+    <motion.div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <motion.div
         className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-md border border-white border-opacity-20"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 150, damping: 12 }}
+        transition={{
+          type: "spring",
+          stiffness: 80, // CAMBIO: Menor rigidez para modal más lento
+          damping: 20,   // CAMBIO: Mayor amortiguamiento para modal más suave
+        }}
       >
         <h2 className="text-3xl font-bold mb-6 text-white text-center">
           Detalle de Venta
@@ -457,7 +477,7 @@ const ModalVer = ({ data, onClose }) => {
           </motion.button>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 

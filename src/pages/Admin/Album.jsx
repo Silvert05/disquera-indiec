@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,8 +15,17 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import DOMPurify from "dompurify";
+import AOS from 'aos'; // Import AOS
+import 'aos/dist/aos.css'; // Import AOS styles
 
 const Album = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 3000, // global duration for animations
+      once: true, // whether animation should happen only once - while scrolling down
+    });
+  }, []);
+
   const [albums, setAlbums] = useState([
     {
       id: 1,
@@ -212,7 +221,9 @@ const Album = () => {
     }
 
     setAlbums(
-      albums.map((album) => (album.id === currentAlbum.id ? { ...formData, id: currentAlbum.id } : album))
+      albums.map((album) =>
+        album.id === currentAlbum.id ? { ...formData, id: currentAlbum.id } : album
+      )
     );
 
     Swal.fire({
@@ -307,7 +318,11 @@ const Album = () => {
     });
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 min-h-screen font-sans pt-16 md:ml-[20rem] relative overflow-hidden">
+    <motion.div
+      className="p-4 sm:p-6 md:p-8 min-h-screen font-sans pt-16 md:ml-[20rem] relative overflow-hidden"
+      data-aos="fade-up"
+      data-aos-anchor-placement="top-bottom"
+    >
       {/* Fondo animado de ondas sutiles */}
       <div className="absolute inset-0 z-0 opacity-20">
         <div className="wave-bg"></div>
@@ -361,9 +376,9 @@ const Album = () => {
             </motion.h1>
             <motion.p
               className="text-lg sm:text-xl font-light opacity-90 drop-shadow-sm"
-              initial={{ y: -30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              initial={{ y: -30, opacity: 10 }}
+              animate={{ y: 0, opacity: 20 }}
+              transition={{ duration: 1.5, delay: 0.3 }}
             >
               Administra tu colección musical de forma eficiente.
             </motion.p>
@@ -602,7 +617,7 @@ const Album = () => {
           <ModalVer data={currentAlbum} onClose={closeModalVer} />
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 

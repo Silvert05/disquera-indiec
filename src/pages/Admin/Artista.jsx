@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Importa useEffect
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,7 +15,25 @@ import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import DOMPurify from "dompurify";
 
+// Importaciones de AOS (Animate On Scroll)
+import AOS from "aos";
+import "aos/dist/aos.css"; // Importa los estilos CSS de AOS
+
 const Artistas = () => {
+  // *********** Inicialización de AOS ***********
+  // Usa useEffect para inicializar AOS una vez que el componente se monta
+  useEffect(() => {
+    AOS.init({
+      // Puedes configurar opciones globales aquí
+      duration: 1000, // Duración por defecto de las animaciones
+      easing: 'ease-out-cubic', // Función de easing por defecto
+      once: true, // Si la animación debe ocurrir solo una vez
+      // Otras opciones...
+    });
+    // Si necesitas refrescar AOS (por ejemplo, si el contenido cambia dinámicamente)
+    // AOS.refresh();
+  }, []); // El array vacío asegura que se ejecute solo una vez al montar
+
   const [artistas, setArtistas] = useState([
     {
       foto: null,
@@ -251,11 +269,15 @@ const Artistas = () => {
       {/* Contenido principal sobre el fondo */}
       <div className="relative z-10">
         {/* Encabezado - Hero Section */}
+        {/* Aquí puedes aplicar la animación AOS */}
         <div
           className="flex flex-col sm:flex-row items-center justify-between p-6 sm:p-8 md:p-10 mb-8 text-white rounded-3xl shadow-xl overflow-hidden relative"
           style={{
             background: "linear-gradient(135deg, #065F46, #047857, #10B981)", // Degradado más dinámico de verde
           }}
+          data-aos="fade-down" // Aplicación de AOS
+          data-aos-easing="linear" // Aplicación de AOS
+          data-aos-duration="1500" // Aplicación de AOS
         >
           {/* Capa de patrón/textura sutil para dinamismo */}
           <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-black to-transparent animate-gradient-shift">
