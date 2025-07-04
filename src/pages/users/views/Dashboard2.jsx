@@ -136,9 +136,9 @@ const Home = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
           {[
-            { nombre: 'Hoodie Aqo', img: '/imgs/hoodieaqo.png' },
-            { nombre: 'Camiseta Leo', img: '/imgs/camiseta1.png' },
-            { nombre: 'Pulsera BTS', img: '/imgs/pulsera.png' },
+            { nombre: 'Hoodie Aqo', img: 'https://img.joomcdn.net/3f66adf53ef47353c13b2ec8c57efc0210159d9a_original.jpeg' },
+            { nombre: 'Camiseta Leo', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgRwdY17aP9vzQYFvigobxhlcvx-V8t-r3Cg&s' },
+            { nombre: 'Pulsera BTS', img: 'https://http2.mlstatic.com/D_650478-MLM70642867549_072023-O.jpg' },
           ].map((producto, i) => (
             <motion.div
               key={i}
@@ -182,9 +182,9 @@ const Home = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
           {[
-            { nombre: 'LEO - Aqo', img: '/imgs/aqoalbum.png' },
-            { nombre: 'Versick Deluxe', img: '/imgs/taza.png' },
-            { nombre: 'Pink Floyd Limited', img: '/imgs/pinkfloydpin.png' },
+            { nombre: 'LEO - Aqo', img: 'https://cdn-images.dzcdn.net/images/cover/e205344f947ecddaf04f2230fc1cb6ad/0x1900-000000-80-0-0.jpg' },
+            { nombre: 'Versick Deluxe', img: 'https://i.scdn.co/image/ab67616d0000b27379444b7e1f30ee546f05d8eb' },
+            { nombre: 'Pink Floyd Limited', img: 'https://cdn-images.dzcdn.net/images/cover/36d1aa06520e7fc9ce26757a71971d7f/1900x1900-000000-80-0-0.jpg' },
           ].map((album, i) => (
             <motion.div
               key={i}

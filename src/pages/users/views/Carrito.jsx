@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaShoppingCart,
@@ -6,8 +6,6 @@ import {
   FaTimesCircle,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import AOS from 'aos'; // Import AOS
-import 'aos/dist/aos.css'; // Import AOS styles
 
 const overlayVariants = {
   hidden: { opacity: 0, backdropFilter: "blur(0px)" },
@@ -31,11 +29,44 @@ const modalVariants = {
   exit: { y: 50, scale: 0.8, opacity: 0, rotateX: 5, transition: { duration: 0.25 } },
 };
 
+// NUEVA ANIMACIÓN AÑADIDA (FALTANTE)
+const rowVariants = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { 
+      type: "spring",
+      stiffness: 300,
+      damping: 20
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    x: 50,
+    transition: { duration: 0.2 } 
+  }
+};
+
+// NUEVA ANIMACIÓN AÑADIDA (FALTANTE)
+const totalVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 200,
+      damping: 15
+    }
+  }
+};
+
 const CarritoTabla = () => {
   const [productos, setProductos] = useState([
     {
       id: 1,
-      imagen: "/1507-1.jpg",
+      imagen: "https://i.etsystatic.com/9923777/r/il/cc5930/3101976038/il_570xN.3101976038_j5gb.jpg",
       detalle: ["Álbum: Roll With The Punches", "Artista: Bryan Adams"],
       estado: "disponible",
       unidades: 1,
@@ -43,7 +74,7 @@ const CarritoTabla = () => {
     },
     {
       id: 2,
-      imagen: "/carrito2.jpg",
+      imagen: "https://img.joomcdn.net/3f66adf53ef47353c13b2ec8c57efc0210159d9a_original.jpeg",
       detalle: ["Roll With The Punches (2 CD Deluxe)", "Bryan Adams"],
       estado: "disponible",
       unidades: 1,
@@ -51,7 +82,7 @@ const CarritoTabla = () => {
     },
     {
       id: 3,
-      imagen: "/carrito3.jpeg",
+      imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDpUZAsfCaatqg-eB8TYLthpFCdYlnhYlmsQ&s",
       detalle: ["Camisa Negra", "Con Diseño", "Ago"],
       estado: "disponible",
       unidades: 2,
@@ -61,14 +92,6 @@ const CarritoTabla = () => {
 
   const [productoAEliminar, setProductoAEliminar] = useState(null);
   const [ventaConfirmada, setVentaConfirmada] = useState(false);
-
-  useEffect(() => {
-    // Initialize AOS
-    AOS.init({
-      once: true, // Animation will only play once
-    });
-  }, []); // Empty dependency array means this runs once on mount
-
 
   const confirmarEliminar = () => {
     setProductos(productos.filter((p) => p.id !== productoAEliminar.id));
@@ -82,18 +105,13 @@ const CarritoTabla = () => {
   const total = productos.reduce((sum, p) => sum + p.costo * p.unidades, 0);
 
   return (
-    <div
-      className="relative min-h-screen bg-black overflow-hidden text-white z-10"
-      data-aos="fade-down" // Added AOS animation
-      data-aos-easing="linear"
-      data-aos-duration="1500"
-    >
+    <div className="relative min-h-screen bg-black overflow-hidden text-white z-10">
       {/* Fondo animado */}
       <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
           background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                         radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+                       radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
           backgroundSize: "200% 200%",
           animation: "bg-pan 20s ease infinite",
         }}
@@ -130,39 +148,53 @@ const CarritoTabla = () => {
               </tr>
             </thead>
             <tbody className="text-center">
-              {productos.map((p) => (
-                <tr key={p.id} className="border-b border-gray-700 hover:bg-white/10 transition-colors">
-                  <td className="p-3">
-                    <img src={p.imagen} alt="producto" className="w-16 h-16 object-cover rounded" />
-                  </td>
-                  <td className="p-3 text-left">
-                    {p.detalle.map((line, i) => (
-                      <div key={i} className="leading-tight">{line}</div>
-                    ))}
-                  </td>
-                  <td className="p-3 capitalize">{p.estado}</td>
-                  <td className="p-3">{p.unidades}</td>
-                  <td className="p-3">${p.costo.toFixed(2)}</td>
-                  <td className="p-3">
-                    <button
-                      onClick={() => setProductoAEliminar(p)}
-                      className="bg-white text-black rounded-full w-8 h-8 text-sm font-bold flex items-center justify-center shadow-md hover:scale-110 transition-transform"
-                    >
-                      ✖
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              <tr className="text-right text-base font-semibold text-white bg-white/10">
+              <AnimatePresence>
+                {productos.map((p) => (
+                  <motion.tr
+                    key={p.id}
+                    variants={rowVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="border-b border-gray-700 hover:bg-white/10 transition-colors"
+                  >
+                    <td className="p-3">
+                      <img src={p.imagen} alt="producto" className="w-16 h-16 object-cover rounded" />
+                    </td>
+                    <td className="p-3 text-left">
+                      {p.detalle.map((line, i) => (
+                        <div key={i} className="leading-tight">{line}</div>
+                      ))}
+                    </td>
+                    <td className="p-3 capitalize">{p.estado}</td>
+                    <td className="p-3">{p.unidades}</td>
+                    <td className="p-3">${p.costo.toFixed(2)}</td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => setProductoAEliminar(p)}
+                        className="bg-white text-black rounded-full w-8 h-8 text-sm font-bold flex items-center justify-center shadow-md hover:scale-110 transition-transform"
+                      >
+                        ✖
+                      </button>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+              <motion.tr 
+                variants={totalVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-right text-base font-semibold text-white bg-white/10"
+              >
                 <td colSpan="4" />
                 <td className="py-4 pr-4 text-right">Total:</td>
                 <td className="py-4 text-center">${total.toFixed(2)}</td>
-              </tr>
+              </motion.tr>
             </tbody>
           </table>
 
           {/* Botón fijo dentro del contenedor de la tabla */}
-          <button
+          <motion.button
             onClick={() => setVentaConfirmada(true)}
             className="
               absolute bottom-4 right-4 z-20
@@ -173,10 +205,12 @@ const CarritoTabla = () => {
               shadow-lg hover:shadow-green-400/60
               transition-all duration-300
             "
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <FaCheckCircle className="text-xl" />
             Confirmar venta
-          </button>
+          </motion.button>
         </div>
       </div>
 

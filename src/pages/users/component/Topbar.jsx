@@ -5,8 +5,11 @@ import {
   FaHome,
   FaUserAlt,
   FaSignOutAlt,
-  FaShoppingCart,
   FaBell,
+  FaCompactDisc,
+  FaMusic,
+  FaTshirt,
+  FaShoppingCart
 } from "react-icons/fa";
 import { GrCatalog } from "react-icons/gr";
 
@@ -60,25 +63,25 @@ const Topbar = () => {
             </li>
             <li className={`${menuItemClass} ${menuItemHoverClass}`}>
               <a href="/album2" className="flex items-center gap-3 w-full">
-                <GrCatalog size={22} className={menuItemIconClass} />
+                <FaCompactDisc size={22} className={menuItemIconClass} />
                 <span className={menuItemTextClass}>Álbum</span>
               </a>
             </li>
             <li className={`${menuItemClass} ${menuItemHoverClass}`}>
               <a href="/cancion" className="flex items-center gap-3 w-full">
-                <FaShoppingCart size={22} className={menuItemIconClass} />
+                <FaMusic size={22} className={menuItemIconClass} />
                 <span className={menuItemTextClass}>Canciones</span>
               </a>
             </li>
             <li className={`${menuItemClass} ${menuItemHoverClass}`}>
               <a href="/merch" className="flex items-center gap-3 w-full">
-                <GrCatalog size={22} className={menuItemIconClass} />
+                <FaTshirt size={22} className={menuItemIconClass} />
                 <span className={menuItemTextClass}>Ropa</span>
               </a>
             </li>
             <li className={`${menuItemClass} ${menuItemHoverClass}`}>
               <a href="/carrito" className="flex items-center gap-3 w-full">
-                <GrCatalog size={22} className={menuItemIconClass} />
+                <FaShoppingCart size={22} className={menuItemIconClass} />
                 <span className={menuItemTextClass}>Carrito</span>
               </a>
             </li>
