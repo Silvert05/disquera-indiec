@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiMusic, FiDownload } from "react-icons/fi";
+import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiMusic, FiDownload, FiPlusCircle } from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx"; // Importar la librería xlsx
@@ -318,17 +318,18 @@ const Usuarios = () => {
       `}</style>
 
       <div className="relative z-10">
-        {/* Encabezado */}
+        {/* Encabezado con Migajas de Pan a la Derecha */}
         <motion.div
           className="glass-card p-8 mb-8 shadow-2xl relative overflow-hidden"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
             type: "spring",
-            stiffness: 50, // CAMBIO: Rigidez reducida para mayor lentitud
-            damping: 20,   // CAMBIO: Amortiguamiento aumentado para mayor suavidad
+            stiffness: 50,
+            damping: 20,
           }}
         >
+          {/* Fondo decorativo */}
           <div
             className="absolute inset-0 opacity-10"
             style={{
@@ -336,52 +337,41 @@ const Usuarios = () => {
               backgroundSize: "cover",
             }}
           ></div>
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-lg text-center sm:text-left">
-              Gestión de Usuarios
-            </h1>
-            <motion.button
-              onClick={openModalCrear}
-              className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group mt-4 sm:mt-0"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              Agregar Usuario
-            </motion.button>
-          </div>
-        </motion.div>
 
-        {/* Migajas de pan */}
-        <motion.div
-          className="glass-card p-4 mb-8 flex items-center justify-center"
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          whileHover="hover"
-          transition={{ delay: 0.2 }}
-        >
-          <nav aria-label="breadcrumb">
-            <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center items-center text-gray-100">
-              {" "}
-              <li>
-                <Link
-                  to="/dashboard"
-                  className="text-[#00FF8C] px-4 py-2 rounded-lg transition duration-300 hover:bg-[rgba(0,255,140,0.15)] hover:text-white no-underline font-semibold"
-                >
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <span className="text-gray-500 px-2">/</span>
-              </li>
-              <li>
-                <span className="text-white px-4 py-2 rounded-lg font-semibold">
-                  Usuarios
-                </span>
-              </li>
-            </ol>
-          </nav>
+          {/* Contenido */}
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+            {/* Título + Descripción */}
+            <div className="flex flex-col items-center sm:items-start">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-lg text-center sm:text-left">
+                Gestión de Usuarios
+              </h1>
+              <p className="text-white/80 mt-2 text-center sm:text-left max-w-md">
+                Administra y controla los usuarios del sistema
+              </p>
+            </div>
+            {/* Migajas de Pan */}
+            <nav aria-label="breadcrumb">
+              <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center sm:justify-end items-center text-gray-100">
+                <li>
+                  <Link
+                    to="/dashboard"
+                    className="text-[#00FF8C] px-4 py-2 rounded-lg transition duration-300 hover:bg-[rgba(0,255,140,0.15)] hover:text-white no-underline font-semibold"
+                  >
+                    Inicio
+                  </Link>
+                </li>
+                <li>
+                  <span className="text-gray-500 px-2">/</span>
+                </li>
+                <li>
+                  <span className="text-white px-4 py-2 rounded-lg font-semibold">
+                    Usuarios
+                  </span>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </motion.div>
 
         {/* Contenedor de búsqueda y exportar */}
@@ -404,147 +394,111 @@ const Usuarios = () => {
             <FiEye className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
           <motion.button
+            className="px-4 py-2 bg-gradient-to-r from-green-600 to-lime-600 rounded-lg flex items-center gap-2"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
             onClick={handleExportToExcel}
-            className="bg-gradient-to-r from-green-600 to-lime-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group w-full sm:w-auto"
+          >
+            <FiDownload /> Exportar
+          </motion.button>
+
+          <motion.button
+            onClick={openModalCrear}
+            className="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg flex items-center gap-2"
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
           >
-            <FiDownload className="group-hover:translate-y-0.5 transition-transform" />
-            Exportar a Excel
+            <FiPlusCircle className="group-hover:rotate-6 transition-transform" />
+            Agregar Usuario
           </motion.button>
         </motion.div>
 
-        {/* Tabla de usuarios */}
+        {/* ----- NUEVO LISTADO COMO TARJETAS (reemplaza la antigua tabla) ----- */}
         <motion.div
-          className="glass-card p-6 overflow-x-auto custom-scrollbar"
-          variants={itemVariants}
+          className="grid gap-6"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", display: "grid" }}
+          variants={containerVariants}
           initial="hidden"
           animate="visible"
           transition={{ delay: 0.4 }}
         >
-          <table className="min-w-full table-auto rounded-lg overflow-hidden">
-            <thead>
-              <tr className="text-white uppercase text-sm leading-normal glass-table-header">
-                <th className="py-3 px-6 text-left">Nombre</th>
-                <th className="py-3 px-6 text-left">Correo</th>
-                <th className="py-3 px-6 text-left">Rol</th>
-                <th className="py-3 px-6 text-left">Contraseña</th>
-                <th className="py-3 px-6 text-center">Estado</th>
-                <th className="py-3 px-6 text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-200 text-sm font-light">
-              {filteredUsuarios.map((usuario, index) => (
-                <motion.tr
-                  key={index}
-                  className="border-b border-gray-700 glass-table-row"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.6, // CAMBIO: Añadida duración para cada fila
-                    ease: "easeOut",
-                    delay: 0.08 * index, // CAMBIO: Aumentado el retraso entre filas
-                  }}
-                >
-                  <td className="py-4 px-6 whitespace-nowrap">
-                    {usuario.nombre}
-                  </td>
-                  <td className="py-4 px-6 whitespace-nowrap">
-                    {usuario.correo}
-                  </td>
-                  <td className="py-4 px-6">{usuario.rol}</td>
-                  <td className="py-4 px-6">{usuario.contraseña}</td>
-                  <td className="py-4 px-6 text-center">
+          <AnimatePresence>
+            {filteredUsuarios.map((usuario, index) => (
+              <motion.div
+                key={index}
+                className="glass-card p-6 rounded-t-3xl rounded-br-3xl rounded-bl-xl shadow-md transition-all duration-300 hover:scale-[1.015]"
+                variants={itemVariants}
+                whileHover="hover"
+                layout
+              >
+                {/* Encabezado: nombre y estado */}
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-white break-words">
+                      {usuario.nombre}
+                    </h3>
                     <span
-                      className={`px-3 py-1 rounded-full text-white text-xs font-semibold ${
-                        usuario.estado
-                          ? "bg-gradient-to-r from-green-500 to-lime-500"
-                          : "bg-red-600"
-                      }`}
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${usuario.estado ? "bg-green-500" : "bg-red-500"}`}
                     >
                       {usuario.estado ? "Activo" : "Inactivo"}
                     </span>
-                  </td>
-                  <td className="py-4 px-6 text-center flex space-x-2 justify-center items-center">
+                  </div>
+                  {/* Botones */}
+                  <div className="flex gap-2">
                     <motion.button
-                      whileHover={{
-                        scale: 1.1,
-                        boxShadow: "0 4px 15px rgba(139, 92, 246, 0.7)",
-                      }}
                       whileTap={{ scale: 0.9 }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                      style={{
-                        backgroundColor: "#8B5CF6", // Morado
-                        boxShadow: "0 4px 10px rgba(139, 92, 246, 0.6)",
-                      }}
+                      className="p-2 rounded-full bg-purple-600"
                       onClick={() => openModalVer(index)}
-                      title="Ver Detalles"
-                      transition={{ duration: 0.2 }}
                     >
-                      <FiEye className="text-white" size={20} />
+                      <FiEye className="text-white" />
                     </motion.button>
-
                     <motion.button
-                      whileHover={{
-                        scale: 1.1,
-                        boxShadow: "0 4px 15px rgba(234, 179, 8, 0.7)",
-                      }}
                       whileTap={{ scale: 0.9 }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                      style={{
-                        backgroundColor: "#D97706", // Amarillo-600 (más oscuro que bg-yellow-600)
-                        boxShadow: "0 4px 10px rgba(234, 179, 8, 0.6)",
-                      }}
+                      className="p-2 rounded-full bg-yellow-600"
                       onClick={() => openModalEditar(index)}
-                      title="Editar Usuario"
-                      transition={{ duration: 0.2 }}
                     >
-                      <FiEdit className="text-white" size={20} />
+                      <FiEdit className="text-white" />
                     </motion.button>
-
                     {usuario.estado ? (
                       <motion.button
-                        whileHover={{
-                          scale: 1.1,
-                          boxShadow: "0 4px 15px rgba(220, 38, 38, 0.7)",
-                        }}
                         whileTap={{ scale: 0.9 }}
-                        className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                        style={{
-                          backgroundColor: "#DC2626", // Rojo-600
-                          boxShadow: "0 4px 10px rgba(220, 38, 38, 0.6)",
-                        }}
+                        className="p-2 rounded-full bg-red-600"
                         onClick={() => openModalEliminar(index)}
-                        title="Desactivar Usuario"
-                        transition={{ duration: 0.2 }}
                       >
-                        <FiTrash2 className="text-white" size={20} />
+                        <FiTrash2 className="text-white" />
                       </motion.button>
                     ) : (
                       <motion.button
-                        whileHover={{
-                          scale: 1.1,
-                          boxShadow: "0 4px 15px rgba(22, 163, 74, 0.7)",
-                        }}
                         whileTap={{ scale: 0.9 }}
-                        className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                        style={{
-                          backgroundColor: "#16A34A", // Verde-600 (más oscuro que bg-green-600)
-                          boxShadow: "0 4px 10px rgba(22, 163, 74, 0.6)",
-                        }}
+                        className="p-2 rounded-full bg-green-600"
                         onClick={() => handleRestoreUsuario(index)}
-                        title="Restaurar Usuario"
-                        transition={{ duration: 0.2 }}
                       >
-                        <FiRefreshCcw className="text-white" size={20} />
+                        <FiRefreshCcw className="text-white" />
                       </motion.button>
                     )}
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+
+                {/* Información adicional */}
+                <div className="space-y-3 text-white text-sm">
+                  <div>
+                    <p className="text-gray-400">Correo:</p>
+                    <p className="font-medium break-all">{usuario.correo}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Rol:</p>
+                    <p>{usuario.rol}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Contraseña:</p>
+                    <p>{usuario.contraseña}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
 
         {/* Animación de carga */}
@@ -666,9 +620,8 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
               name="nombre"
               value={formData.nombre}
               onChange={onChange}
-              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${
-                errors.nombre ? "border-red-500" : ""
-              }`}
+              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${errors.nombre ? "border-red-500" : ""
+                }`}
             />
             {errors.nombre && (
               <p className="text-red-400 text-sm mt-1">{errors.nombre}</p>
@@ -683,9 +636,8 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
               name="correo"
               value={formData.correo}
               onChange={onChange}
-              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${
-                errors.correo ? "border-red-500" : ""
-              }`}
+              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${errors.correo ? "border-red-500" : ""
+                }`}
             />
             {errors.correo && (
               <p className="text-red-400 text-sm mt-1">{errors.correo}</p>
@@ -699,9 +651,8 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
               name="rol"
               value={formData.rol}
               onChange={onChange}
-              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${
-                errors.rol ? "border-red-500" : ""
-              }`}
+              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${errors.rol ? "border-red-500" : ""
+                }`}
             >
               <option value="" className="bg-gray-800 text-white">
                 Selecciona un rol
@@ -726,9 +677,8 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
               name="contraseña"
               value={formData.contraseña}
               onChange={onChange}
-              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${
-                errors.contraseña ? "border-red-500" : ""
-              }`}
+              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${errors.contraseña ? "border-red-500" : ""
+                }`}
             />
             {errors.contraseña && (
               <p className="text-red-400 text-sm mt-1">{errors.contraseña}</p>
@@ -808,11 +758,10 @@ const ModalVer = ({ data, onClose }) => {
               Estado
             </label>
             <span
-              className={`px-4 py-2 rounded-full text-white text-sm font-bold ${
-                data.estado
-                  ? "bg-gradient-to-r from-green-500 to-lime-500"
-                  : "bg-red-600"
-              }`}
+              className={`px-4 py-2 rounded-full text-white text-sm font-bold ${data.estado
+                ? "bg-gradient-to-r from-green-500 to-lime-500"
+                : "bg-red-600"
+                }`}
             >
               {data.estado ? "Activo" : "Inactivo"}
             </span>
@@ -883,9 +832,8 @@ const ModalEliminar = ({
               type="password"
               value={confirmarContraseña}
               onChange={(e) => setConfirmarContraseña(e.target.value)}
-              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${
-                error ? "border-red-500" : ""
-              }`}
+              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${error ? "border-red-500" : ""
+                }`}
             />
             {error && (
               <p className="text-red-400 text-sm mt-1">{error}</p>
@@ -968,9 +916,8 @@ const ModalConfirmarEditar = ({
               type="password"
               value={confirmarContraseña}
               onChange={(e) => setConfirmarContraseña(e.target.value)}
-              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${
-                error ? "border-red-500" : ""
-              }`}
+              className={`glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C] ${error ? "border-red-500" : ""
+                }`}
             />
             {error && (
               <p className="text-red-400 text-sm mt-1">{error}</p>
