@@ -6,434 +6,318 @@ import {
   FiEdit,
   FiTrash2,
   FiRefreshCcw,
+  FiFilter,
   FiDownload,
-  FiSearch,
   FiPlusCircle,
+  FiSearch,
+  FiArrowUp,
+  FiArrowDown
 } from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
-import DOMPurify from "dompurify";
-
-// Importaciones de AOS (Animate On Scroll)
-import AOS from "aos";
-import "aos/dist/aos.css"; // Importa los estilos CSS de AOS
+import xss from "xss";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Artistas = () => {
-  // *********** Inicialización de AOS ***********
   useEffect(() => {
     AOS.init({
-      duration: 1000,
-      easing: "ease-out-cubic",
       once: true,
+      mirror: false,
     });
+    AOS.refresh();
   }, []);
 
   const [artistas, setArtistas] = useState([
     {
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYRoSMJk9DH7ExNNmdJHkVx1No7TVknivCig&s", // Simulated URL
+      id: 'a1',
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYRoSMJk9DH7ExNNmdJHkVx1No7TVknivCig&s",
       nombre: "Artista 1",
       genero: "Rock",
       pais: "México",
-      biografia:
-        "Biografía detallada del artista 1, con un enfoque en su trayectoria, influencias y principales éxitos musicales. Este artista ha marcado un hito en la escena rockera de su país.",
+      biografia: "Biografía detallada del artista 1, con un enfoque en su trayectoria, influencias y principales éxitos musicales. Este artista ha marcado un hito en la escena rockera de su país.",
       estado: true,
     },
     {
-      foto: "https://www.rockandpop.cl/wp-content/uploads/2023/03/Taylor-Swift-GettyImages-1425749502-web-768x432.jpg", // Simulated URL
+      id: 'a2',
+      foto: "https://www.rockandpop.cl/wp-content/uploads/2023/03/Taylor-Swift-GettyImages-1425749502-web-768x432.jpg",
       nombre: "Artista 2",
       genero: "Pop",
       pais: "Estados Unidos",
-      biografia:
-        "Conocido por sus melodías pegadizas y letras emotivas, este artista pop ha conquistado las listas de éxitos mundiales. Su música es sinónimo de innovación y conexión con el público joven.",
+      biografia: "Conocido por sus melodías pegadizas y letras emotivas, este artista pop ha conquistado las listas de éxitos mundiales. Su música es sinónimo de innovación y conexión con el público joven.",
       estado: true,
     },
     {
-      foto: "https://i0.wp.com/www.periodismo.com/wp-content/subid/Quienes-son-los-musicos-mas-escuchados-del-mundo-scaled.jpg?fit=959%2C1200&ssl=1", // Simulated URL
+      id: 'a3',
+      foto: "https://i0.wp.com/www.periodismo.com/wp-content/subid/Quienes-son-los-musicos-mas-escuchados-del-mundo-scaled.jpg?fit=959%2C1200&ssl=1",
       nombre: "Cantante A",
       genero: "Indie",
       pais: "Canadá",
-      biografia:
-        "Una voz suave que explora los paisajes sonoros con letras introspectivas y arreglos minimalistas. Sus conciertos son experiencias íntimas y envolventes que transportan al oyente.",
+      biografia: "Una voz suave que explora los paisajes sonoros con letras introspectivas y arreglos minimalistas. Sus conciertos son experiencias íntimas y envolventes que transportan al oyente.",
       estado: true,
     },
     {
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlGw8IttRxLM5-MKJVpOt90pIdTV-0lHsfXQ&s", // Simulated URL
+      id: 'a4',
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlGw8IttRxLM5-MKJVpOt90pIdTV-0lHsfXQ&s",
       nombre: "Banda B",
       genero: "Metal",
       pais: "Alemania",
-      biografia:
-        "Conocidos por sus riffs poderosos, baterías demoledoras y letras profundas que abordan temas sociales y existenciales. Sus shows en vivo son una descarga de energía pura.",
+      biografia: "Conocidos por sus riffs poderosos, baterías demoledoras y letras profundas que abordan temas sociales y existenciales. Sus shows en vivo son una descarga de energía pura.",
       estado: false,
     },
     {
-      foto: "https://los40.com.ar/los40/imagenes/2017/12/29/musica/1514554255_620849_1514554626_gigante_normal.jpg", // Simulated URL
+      id: 'a5',
+      foto: "https://los40.com.ar/los40/imagenes/2017/12/29/musica/1514554255_620849_1514554626_gigante_normal.jpg",
       nombre: "Solista C",
       genero: "Electrónica",
       pais: "Francia",
-      biografia:
-        "Maestro de los beats sintéticos y ambientes hipnóticos, creando paisajes sonoros futuristas que invitan al baile y la introspección. Sus producciones son innovadoras y vanguardistas.",
+      biografia: "Maestro de los beats sintéticos y ambientes hipnóticos, creando paisajes sonoros futuristas que invitan al baile y la introspección. Sus producciones son innovadoras y vanguardistas.",
       estado: true,
     },
     {
-      foto: "https://www.portafolio.co/files/article_multimedia/files/crop/uploads/2016/10/27/58123c90e56fa.r_1477592368304.173-0-592-315.jpeg", // Simulated URL
+      id: 'a6',
+      foto: "https://www.portafolio.co/files/article_multimedia/files/crop/uploads/2016/10/27/58123c90e56fa.r_1477592368304.173-0-592-315.jpeg",
       nombre: "Dúo D",
       genero: "Folk",
       pais: "Irlanda",
-      biografia:
-        "Armonías vocales exquisitas y melodías acústicas que evocan paisajes bucólicos y narran historias de la tradición. Su música es un viaje al corazón de la cultura celta.",
+      biografia: "Armonías vocales exquisitas y melodías acústicas que evocan paisajes bucólicos y narran historias de la tradición. Su música es un viaje al corazón de la cultura celta.",
       estado: false,
     },
   ]);
 
-  const sanitizeInput = (input) => {
-    return DOMPurify.sanitize(input);
-  };
+  const generosMusicales = [
+    "Rock", "Pop", "Jazz", "Electrónica", "Hip-Hop", "Reggae", "Metal",
+    "Blues", "Country", "Folk", "R&B", "Soul", "Funk", "Latina", "Reggaeton",
+    "Clásica", "Alternativo", "Indie", "Cumbia", "Salsa", "Merengue", "Bachata",
+    "World Music", "Otros"
+  ];
+
+  const paises = [
+    "Argentina", "Bolivia", "Brasil", "Canadá", "Chile", "Colombia", "Costa Rica",
+    "Cuba", "Ecuador", "El Salvador", "Estados Unidos", "Guatemala", "Honduras",
+    "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "Puerto Rico", 
+    "República Dominicana", "Uruguay", "Venezuela", "España", "Francia", 
+    "Alemania", "Italia", "Reino Unido", "Portugal", "Otro"
+  ];
 
   const [modalCrear, setModalCrear] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalVer, setModalVer] = useState(false);
-
-  // Form data now includes temporary file and preview URL for new uploads
   const [formData, setFormData] = useState({
-    foto: "", // This will store the URL once "uploaded"
-    fotoFile: null, // Temporary storage for the actual File object before upload
-    fotoPreviewUrl: "", // Temporary URL for immediate display in the form
+    foto: null,
     nombre: "",
     genero: "",
     pais: "",
     biografia: "",
   });
-
   const [currentArtista, setCurrentArtista] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterActive, setFilterActive] = useState("all");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [errors, setErrors] = useState({});
 
-  const openModalCrear = () => {
-    setFormData({
-      foto: "",
-      fotoFile: null,
-      fotoPreviewUrl: "",
-      nombre: "",
-      genero: "",
-      pais: "",
-      biografia: "",
-    });
-    setModalCrear(true);
-  };
-  const closeModalCrear = () => setModalCrear(false);
-
-  const openModalEditar = (index) => {
-    setCurrentArtista(index);
-    // When editing, set foto to the existing URL, clear fotoFile/fotoPreviewUrl unless a new file is chosen
-    setFormData({
-      ...artistas[index],
-      fotoFile: null,
-      fotoPreviewUrl: artistas[index].foto, // Use existing URL for preview
-    });
-    setModalEditar(true);
-  };
-  const closeModalEditar = () => setModalEditar(false);
-
-  const openModalVer = (index) => {
-    setCurrentArtista(index);
-    setModalVer(true);
-  };
-  const closeModalVer = () => setModalVer(false);
-
-  // Simulate file upload to a server
-  const handleFileUpload = async (file) => {
-    if (!file) return ""; // No file to upload
-
-    // In a real application, you would send this file to your backend
-    // and receive a URL in response.
-    // For this example, we'll just simulate a delay and create a blob URL.
-    console.log("Simulating file upload for:", file.name);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
-
-    // For demonstration, we'll use a placeholder URL.
-    // In a real app, this would be the actual URL returned from your server after upload.
-    const simulatedUrl = `https://via.placeholder.com/150/${Math.floor(
-      Math.random() * 16777215
-    ).toString(16)}/ffffff?text=${file.name.substring(0, 5)}`;
-    console.log("Simulated upload complete. URL:", simulatedUrl);
-    return simulatedUrl;
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-
-    if (name === "foto") {
-      const file = files[0];
-      setFormData({
-        ...formData,
-        fotoFile: file,
-        fotoPreviewUrl: file ? URL.createObjectURL(file) : "", // Create object URL for instant preview
-      });
-    } else {
-      setFormData({ ...formData, [name]: sanitizeInput(value) });
-    }
-  };
-
-  const validateForm = () => {
-    return (
-      formData.nombre &&
-      formData.genero &&
-      formData.pais &&
-      formData.biografia
-    );
-  };
-
-  const handleAddArtista = async () => {
-    if (!validateForm()) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Todos los campos son obligatorios.",
-      });
-      return;
-    }
-
-    Swal.fire({
-      title: "Agregando Artista...",
-      text: "Por favor, espera.",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
-    let uploadedPhotoUrl = formData.foto;
-    if (formData.fotoFile) {
-      // If a new file was selected
-      uploadedPhotoUrl = await handleFileUpload(formData.fotoFile);
-    }
-
-    setArtistas([
-      ...artistas,
-      { ...formData, foto: uploadedPhotoUrl, estado: true },
-    ]);
-
-    Swal.fire({
-      icon: "success",
-      title: "Artista agregado",
-      text: `El artista "${formData.nombre}" fue agregado exitosamente.`,
-      confirmButtonColor: "#00FF8C", // Neon Green
-    });
-
-    closeModalCrear();
-    setFormData({
-      foto: "",
-      fotoFile: null,
-      fotoPreviewUrl: "",
-      nombre: "",
-      genero: "",
-      pais: "",
-      biografia: "",
-    });
-  };
-
-  const handleUpdateArtista = async () => {
-    if (!validateForm()) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Todos los campos son obligatorios.",
-      });
-      return;
-    }
-
-    Swal.fire({
-      title: "Actualizando Artista...",
-      text: "Por favor, espera.",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
-    let updatedPhotoUrl = formData.foto; // Start with the existing URL
-    if (formData.fotoFile) {
-      // If a new file was selected for upload
-      updatedPhotoUrl = await handleFileUpload(formData.fotoFile);
-    }
-
-    const updatedArtistas = [...artistas];
-    updatedArtistas[currentArtista] = { ...formData, foto: updatedPhotoUrl }; // Update with the new or existing URL
-
-    setArtistas(updatedArtistas);
-
-    Swal.fire({
-      icon: "success",
-      title: "Artista actualizado",
-      text: `El artista "${formData.nombre}" fue actualizado exitosamente.`,
-      confirmButtonColor: "#00FF8C", // Neon Green
-    });
-
-    closeModalEditar();
-    setFormData({
-      foto: "",
-      fotoFile: null,
-      fotoPreviewUrl: "",
-      nombre: "",
-      genero: "",
-      pais: "",
-      biografia: "",
-    });
-  };
-
-  const handleDeleteArtista = (index) => {
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "¡No podrás revertir esto! El artista será marcado como inactivo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#EF4444",
-      cancelButtonColor: "#6B7280",
-      confirmButtonText: "Sí, desactivar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedArtistas = [...artistas];
-        updatedArtistas[index].estado = false;
-        setArtistas(updatedArtistas);
-
-        Swal.fire({
-          icon: "info",
-          title: "Artista desactivado",
-          text: "El artista fue marcado como inactivo.",
-          confirmButtonColor: "#00FF8C", // Neon Green
-        });
-      }
-    });
-  };
-
-  const handleRestoreArtista = (index) => {
-    const updatedArtistas = [...artistas];
-    updatedArtistas[index].estado = true;
-    setArtistas(updatedArtistas);
-
-    Swal.fire({
-      icon: "success",
-      title: "Artista restaurado",
-      text: "El artista fue restaurado y está activo nuevamente.",
-      confirmButtonColor: "#00FF8C", // Neon Green
-    });
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(sanitizeInput(e.target.value));
-  };
-
-  const handleExportExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(
-      artistas.map((artista) => ({
-        Nombre: artista.nombre,
-        Genero: artista.genero,
-        Pais: artista.pais,
-        Biografia: artista.biografia,
-        Estado: artista.estado ? "Activo" : "Inactivo",
-      }))
-    );
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Artistas");
-    XLSX.writeFile(workbook, "artistas.xlsx");
-
-    Swal.fire({
-      icon: "success",
-      title: "Exportado",
-      text: "La lista de artistas ha sido exportada a Excel.",
-      confirmButtonColor: "#00FF8C", // Neon Green
-    });
-  };
-
-  const filteredArtistas = artistas.filter((artista) =>
-    artista.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Framer Motion Variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
-  const itemVariants = {
+  const cardVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 50,
-        damping: 15,
-      },
+      transition: { type: "spring", stiffness: 100 }
     },
     hover: {
-      scale: 1.02,
-      boxShadow: "0 8px 20px rgba(0, 255, 140, 0.2)",
-      transition: { duration: 0.2 },
-    },
-    tap: { scale: 0.98 },
+      y: -5,
+      boxShadow: "0 10px 25px rgba(0, 255, 140, 0.3)"
+    }
   };
 
   const buttonVariants = {
-    hover: {
-      scale: 1.05,
-      boxShadow: "0 0 15px rgba(0, 255, 140, 0.5)",
-      transition: { duration: 0.2 },
-    },
-    tap: { scale: 0.95 },
+    hover: { scale: 1.05, boxShadow: "0 0 15px rgba(0, 255, 140, 0.5)" },
+    tap: { scale: 0.95 }
+  };
+
+  const handleSearchChange = (e) => setSearchTerm(xss(e.target.value));
+
+  const handleExportToExcel = () => {
+    const dataToExport = filteredArtistas.map(({ foto, ...rest }) => rest);
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Artistas");
+    XLSX.writeFile(workbook, "artistas.xlsx");
+  };
+
+  const handleFilterChange = () => {
+    setFilterActive(prev => {
+      if (prev === "all") return "active";
+      if (prev === "active") return "inactive";
+      return "all";
+    });
+  };
+
+  const handleSortByName = () => {
+    setSortOrder(prev => prev === "asc" ? "desc" : "asc");
+  };
+
+  const filteredArtistas = artistas
+    .filter(artista =>
+      artista.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      artista.genero.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      artista.pais.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter(artista => {
+      if (filterActive === "all") return true;
+      return filterActive === "active" ? artista.estado : !artista.estado;
+    })
+    .sort((a, b) => sortOrder === "asc" ?
+      a.nombre.localeCompare(b.nombre) :
+      b.nombre.localeCompare(a.nombre)
+    );
+
+  const openModalCrear = () => {
+    setFormData({
+      foto: null,
+      nombre: "",
+      genero: "",
+      pais: "",
+      biografia: "",
+    });
+    setErrors({});
+    setModalCrear(true);
+  };
+
+  const openModalEditar = (artistaToEdit) => {
+    setCurrentArtista(artistaToEdit);
+    setFormData(artistaToEdit);
+    setErrors({});
+    setModalEditar(true);
+  };
+
+  const openModalVer = (artistaToView) => {
+    setCurrentArtista(artistaToView);
+    setModalVer(true);
+  };
+
+  const closeModal = () => {
+    setModalCrear(false);
+    setModalEditar(false);
+    setModalVer(false);
+    setCurrentArtista(null);
+    setErrors({});
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === "foto" ? files[0] : xss(value)
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.nombre) newErrors.nombre = "Nombre es obligatorio.";
+    if (!formData.genero) newErrors.genero = "Género es obligatorio.";
+    if (!formData.pais) newErrors.pais = "País es obligatorio.";
+    if (!formData.biografia) newErrors.biografia = "Biografía es obligatoria.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleAddArtista = () => {
+    if (!validateForm()) return;
+    setArtistas([...artistas, { ...formData, id: Date.now().toString(), estado: true }]);
+    Swal.fire("Éxito", "Artista agregado exitosamente", "success");
+    closeModal();
+  };
+
+  const handleUpdateArtista = () => {
+    if (!validateForm()) return;
+    setArtistas(prevArtistas => prevArtistas.map(artista =>
+      artista.id === currentArtista.id ? { ...formData, id: currentArtista.id } : artista
+    ));
+    Swal.fire("Éxito", "Artista actualizado exitosamente", "success");
+    closeModal();
+  };
+
+  const handleDeleteArtista = (artistaToDelete) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¡Estás a punto de desactivar "${artistaToDelete.nombre}"! No podrás revertir esto directamente desde aquí.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, desactívalo',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setArtistas(prevArtistas => prevArtistas.map(artista =>
+          artista.id === artistaToDelete.id ? { ...artista, estado: false } : artista
+        ));
+        Swal.fire(
+          'Desactivado!',
+          `El artista "${artistaToDelete.nombre}" ha sido desactivado.`,
+          'success'
+        );
+      }
+    });
+  };
+
+  const handleRestoreArtista = (artistaToRestore) => {
+    Swal.fire({
+      title: '¿Quieres activar este artista?',
+      text: `El artista "${artistaToRestore.nombre}" estará visible de nuevo.`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, actívalo',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setArtistas(prevArtistas => prevArtistas.map(artista =>
+          artista.id === artistaToRestore.id ? { ...artista, estado: true } : artista
+        ));
+        Swal.fire(
+          'Activado!',
+          `El artista "${artistaToRestore.nombre}" ha sido activado.`,
+          'success'
+        );
+      }
+    });
   };
 
   return (
-    <motion.div
-      className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden"
-      initial={{ y: -50 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 1.5, ease: "easeOut" }}
-    >
-      {/* Background Animated Gradient */}
-      <div
-        className="absolute inset-0 z-0 opacity-20"
-        style={{
-          background: `radial-gradient(circle at top left, #39FF14 0%, transparent 30%), 
-                           radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
-          backgroundSize: "200% 200%",
-          animation: "bg-pan 20s ease infinite",
-        }}
-      ></div>
+    <div className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden font-inter">
+      <div className="absolute inset-0 z-0 opacity-20" style={{
+        background: `radial-gradient(circle at top left, #39FF14 0%, transparent 50%),
+                     radial-gradient(circle at bottom right, #00FF8C 0%, transparent 30%)`,
+        backgroundSize: "200% 200%",
+        animation: "bg-pan 20s ease infinite",
+      }}></div>
 
       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+          font-family: 'Inter', sans-serif;
+        }
         @keyframes bg-pan {
-          0% {
-            background-position: 0% 0%;
-          }
-          50% {
-            background-position: 100% 100%;
-          }
-          100% {
-            background-position: 0% 0%;
-          }
+          0% { background-position: 0% 0%; }
+          50% { background-position: 100% 100%; }
+          100% { background-position: 0% 0%; }
         }
         .glass-card {
-          background-color: rgba(
-            255,
-            255,
-            255,
-            0.05
-          ); /* Semi-transparent blanco */
-          backdrop-filter: blur(15px) saturate(180%);
-          -webkit-backdrop-filter: blur(15px) saturate(180%); /* Safari support */
-          border: 1px solid rgba(255, 255, 255, 0.1); /* Borde más sutil */
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-          border-radius: 1.5rem; /* rounded-3xl */
+          border-radius: 1.5rem;
         }
         .custom-scrollbar::-webkit-scrollbar {
-          height: 8px;
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
@@ -441,429 +325,415 @@ const Artistas = () => {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #00ff8c; /* Verde Eléctrico */
+          background-color: #00FF8C;
           border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #39ff14; /* Verde Neón */
-        }
-        /* Table specific styling for dark glassmorphism */
-        .glass-table-header {
-          background-color: rgba(0, 255, 140, 0.2); /* Verde esmeralda sutil */
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(0, 255, 140, 0.3);
-        }
-        .glass-table-row {
-          background-color: rgba(
-            255,
-            255,
-            255,
-            0.03
-          ); /* Fondo de fila más sutil */
-        }
-        .glass-table-row:hover {
-          background-color: rgba(255, 255, 255, 0.08);
-        }
-        .input-glass {
-          background-color: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #e2e8f0; /* text-gray-200 */
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-        .input-glass::placeholder {
-          color: #94a3b8; /* text-gray-400 */
-        }
-        .input-glass:focus {
-          border-color: #00ff8c; /* focus:ring-[#00FF8C] */
-          box-shadow: 0 0 0 2px rgba(0, 255, 140, 0.5);
+          border: 2px solid rgba(255, 255, 255, 0.1);
         }
       `}</style>
 
       <div className="relative z-10">
-        {/* Encabezado */}
         <motion.div
-          className="glass-card p-8 mb-8 shadow-2xl relative overflow-hidden"
+          className="glass-card p-8 mb-8 flex flex-col md:flex-row justify-between items-center"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 50,
-            damping: 20,
-          }}
+          transition={{ type: "spring", stiffness: 120 }}
+          data-aos="fade-down"
+          data-aos-easing="linear"
+          data-aos-duration="1500"
         >
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: `url(/img/dashboard-img/abstract-pattern-dark.png)`,
-              backgroundSize: "cover",
-            }}
-          ></div>
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-lg text-center sm:text-left mb-4 sm:mb-0">
-              Gestión de Artistas
-            </h1>
+          <div>
+            <h1 className="text-4xl font-bold mb-2 md:mb-0">Gestión de Artistas</h1>
+            <p className="text-lg opacity-90">Administra los artistas del sistema</p>
+          </div>
+
+          <motion.div
+            className="glass-card p-3 rounded-lg flex items-center mt-4 md:mt-0"
+            variants={cardVariants}
+            data-aos="fade-down"
+            data-aos-easing="linear"
+            data-aos-duration="1500"
+          >
+            <nav className="flex items-center space-x-2 text-sm">
+              <Link to="/dashboard" className="text-[#00FF8C] hover:underline">
+                Inicio
+              </Link>
+              <span className="text-gray-500">/</span>
+              <span className="text-white">Artistas</span>
+            </nav>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="glass-card p-6 mb-8 flex flex-wrap gap-4 items-center justify-between"
+          variants={cardVariants}
+          data-aos="fade-down"
+          data-aos-easing="linear"
+          data-aos-duration="1500"
+        >
+          <div className="relative flex-grow max-w-full md:max-w-sm">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Buscar artista por nombre, género o país..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full pl-10 pr-4 py-2 bg-transparent border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2 justify-center md:justify-end">
             <motion.button
-              onClick={openModalCrear}
-              className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group"
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-lime-500 rounded-lg flex items-center gap-2 text-white font-semibold"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
+              onClick={handleFilterChange}
             >
-              <FiPlusCircle className="group-hover:rotate-6 transition-transform" />
-              Agregar Nuevo Artista
+              <FiFilter />
+              {filterActive === "all" ? "Todos" : filterActive === "active" ? "Activos" : "Inactivos"}
+            </motion.button>
+           
+            <motion.button
+              className="px-4 py-2 bg-gradient-to-r from-green-600 to-lime-600 rounded-lg flex items-center gap-2 text-white font-semibold"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              onClick={handleExportToExcel}
+            >
+              <FiDownload /> Exportar
+            </motion.button>
+            <motion.button
+              className="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg flex items-center gap-2 text-white font-semibold"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              onClick={openModalCrear}
+            >
+              <FiPlusCircle /> Agregar Artista
             </motion.button>
           </div>
         </motion.div>
 
-        {/* Migajas de pan */}
         <motion.div
-          className="glass-card p-4 mb-8 flex items-center justify-center"
-          variants={itemVariants}
+          className="grid gap-6"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
+          variants={containerVariants}
           initial="hidden"
           animate="visible"
-          whileHover="hover"
-          transition={{ delay: 0.2 }}
+          data-aos="fade-up"
+          data-aos-easing="linear"
+          data-aos-duration="1500"
         >
-          <nav aria-label="breadcrumb">
-            <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center items-center text-gray-100">
-              {" "}
-              <li>
-                <Link
-                  to="/dashboard"
-                  className="text-[#00FF8C] px-4 py-2 rounded-lg transition duration-300 hover:bg-[rgba(0,255,140,0.15)] hover:text-white no-underline font-semibold"
-                >
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <span className="text-gray-500 px-2">/</span>
-              </li>
-              <li>
-                <span className="text-white px-4 py-2 rounded-lg font-semibold">
-                  Artistas
-                </span>
-              </li>
-            </ol>
-          </nav>
+          <AnimatePresence>
+            {filteredArtistas.length > 0 ? (
+              filteredArtistas.map((artista, index) => (
+                <ArtistaCard
+                  key={artista.id}
+                  artista={artista}
+                  index={index}
+                  cardVariants={cardVariants}
+                  openModalVer={openModalVer}
+                  openModalEditar={openModalEditar}
+                  handleDeleteArtista={handleDeleteArtista}
+                  handleRestoreArtista={handleRestoreArtista}
+                />
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="col-span-full text-center text-gray-400 text-xl py-10"
+              >
+                No se encontraron artistas que coincidan con tu búsqueda o filtros.
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
-        {/* Contenedor de búsqueda y exportar */}
-        <motion.div
-          className="glass-card p-6 mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4"
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          whileHover="hover"
-          transition={{ delay: 0.3 }}
-        >
-          <div className="relative w-full sm:w-auto flex-grow">
-            <input
-              type="text"
-              placeholder="Buscar artista por nombre..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="input-glass p-3 pl-10 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
+        <AnimatePresence>
+          {modalCrear && (
+            <ModalFormulario
+              formData={formData}
+              onClose={closeModal}
+              onChange={handleInputChange}
+              onSave={handleAddArtista}
+              generosMusicales={generosMusicales}
+              paises={paises}
+              errors={errors}
+              title="Agregar Artista"
             />
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          </div>
-          <motion.button
-            onClick={handleExportExcel}
-            className="bg-gradient-to-r from-green-600 to-lime-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <FiDownload className="group-hover:translate-y-0.5 transition-transform" />
-            Exportar a Excel
-          </motion.button>
-        </motion.div>
+          )}
 
-        {/* Tabla de artistas */}
-        <motion.div
-          className="glass-card p-6 overflow-x-auto custom-scrollbar"
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.4 }}
-        >
-          <table className="min-w-full table-auto rounded-lg overflow-hidden">
-            <thead>
-              <tr className="text-white uppercase text-sm leading-normal glass-table-header">
-                <th className="py-3 px-6 text-left">Foto</th>
-                <th className="py-3 px-6 text-left">Nombre</th>
-                <th className="py-3 px-6 text-left">Género</th>
-                <th className="py-3 px-6 text-left">País</th>
-                <th className="py-3 px-6 text-left">Biografía</th>
-                <th className="py-3 px-6 text-center">Estado</th>
-                <th className="py-3 px-6 text-center">Acciones</th>
-              </tr>
-            </thead>
-            <AnimatePresence>
-              <tbody className="text-gray-200 text-sm font-light">
-                {filteredArtistas.length > 0 ? (
-                  filteredArtistas.map((artista, index) => (
-                    <motion.tr
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, x: -50 }}
-                      transition={{
-                        duration: 0.6,
-                        ease: "easeOut",
-                        delay: 0.08 * index,
-                      }}
-                      className="border-b border-gray-700 glass-table-row"
-                    >
-                      <td className="py-4 px-6">
-                        {artista.foto ? (
-                          <img
-                            src={artista.foto} // Now directly use the URL
-                            alt={`Foto de ${artista.nombre}`}
-                            className="w-16 h-16 object-cover rounded-full shadow-md border-2 border-[#00FF8C]"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 text-xs font-semibold border-2 border-gray-600">
-                            Sin Foto
-                          </div>
-                        )}
-                      </td>
-                      <td className="py-4 px-6 text-white font-medium">
-                        {artista.nombre}
-                      </td>
-                      <td className="py-4 px-6">{artista.genero}</td>
-                      <td className="py-4 px-6">{artista.pais}</td>
-                      <td className="py-4 px-6 max-w-xs truncate">
-                        {artista.biografia}
-                      </td>
-                      <td className="py-4 px-6 text-center">
-                        <span
-                          className={`px-3 py-1 rounded-full text-white text-xs font-semibold ${
-                            artista.estado
-                              ? "bg-gradient-to-r from-green-500 to-lime-500"
-                              : "bg-red-600"
-                          }`}
-                        >
-                          {artista.estado ? "Activo" : "Inactivo"}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6 flex items-center justify-center space-x-2">
-                        <motion.button
-                          className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
-                          style={{
-                            backgroundColor: "#8B5CF6",
-                            boxShadow: "0 4px 10px rgba(139, 92, 246, 0.6)",
-                          }}
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => openModalVer(index)}
-                          title="Ver detalles"
-                        >
-                          <FiEye size={20} />
-                        </motion.button>
-                        <motion.button
-                          className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
-                          style={{
-                            backgroundColor: "#FACC15",
-                            boxShadow: "0 4px 10px rgba(250, 204, 21, 0.6)",
-                          }}
-                          whileHover={{ scale: 1.1, rotate: -5 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => openModalEditar(index)}
-                          title="Editar artista"
-                        >
-                          <FiEdit size={20} />
-                        </motion.button>
-                        {artista.estado ? (
-                          <motion.button
-                            className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
-                            style={{
-                              backgroundColor: "#EF4444",
-                              boxShadow: "0 4px 10px rgba(239, 68, 68, 0.6)",
-                            }}
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => handleDeleteArtista(index)}
-                            title="Desactivar artista"
-                          >
-                            <FiTrash2 size={20} />
-                          </motion.button>
-                        ) : (
-                          <motion.button
-                            className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer text-white"
-                            style={{
-                              backgroundColor: "#22C55E",
-                              boxShadow: "0 4px 10px rgba(34, 197, 94, 0.6)",
-                            }}
-                            whileHover={{ scale: 1.1, rotate: -5 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => handleRestoreArtista(index)}
-                            title="Restaurar artista"
-                          >
-                            <FiRefreshCcw size={20} />
-                          </motion.button>
-                        )}
-                      </td>
-                    </motion.tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="7" className="text-center py-4 text-gray-400">
-                      No se encontraron artistas.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </AnimatePresence>
-          </table>
-        </motion.div>
+          {modalEditar && (
+            <ModalFormulario
+              formData={formData}
+              onClose={closeModal}
+              onChange={handleInputChange}
+              onSave={handleUpdateArtista}
+              generosMusicales={generosMusicales}
+              paises={paises}
+              errors={errors}
+              title="Editar Artista"
+            />
+          )}
+
+          {modalVer && (
+            <ModalVer
+              data={currentArtista}
+              onClose={closeModal}
+            />
+          )}
+        </AnimatePresence>
       </div>
+    </div>
+  );
+};
 
-      <AnimatePresence>
-        {modalCrear && (
-          <ModalFormulario
-            formData={formData}
-            onClose={closeModalCrear}
-            onChange={handleInputChange}
-            onSave={handleAddArtista}
-            title="Crear Nuevo Artista"
-          />
-        )}
+const ArtistaCard = ({ artista, index, cardVariants, openModalVer, openModalEditar, handleDeleteArtista, handleRestoreArtista }) => {
+  return (
+    <motion.div
+      key={artista.id}
+      className="glass-card p-6 rounded-t-3xl rounded-br-3xl rounded-bl-xl shadow-md transition-all duration-300 hover:scale-[1.015] flex flex-col"
+      variants={cardVariants}
+      whileHover="hover"
+      layout
+      data-aos="fade-up"
+      data-aos-delay={index * 50}
+    >
+      <div className="flex flex-col h-full">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h3 className="text-xl font-bold text-white">{artista.nombre}</h3>
+            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${artista.estado ? "bg-green-500" : "bg-red-500"}`}>
+              {artista.estado ? "Activo" : "Inactivo"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              className="p-2 bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
+              onClick={() => openModalVer(artista)}
+              title="Ver detalles"
+            >
+              <FiEye className="text-white" />
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              className="p-2 bg-yellow-500 rounded-full hover:bg-yellow-600 transition-colors"
+              onClick={() => openModalEditar(artista)}
+              title="Editar artista"
+            >
+              <FiEdit className="text-white" />
+            </motion.button>
+            {artista.estado ? (
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition-colors"
+                onClick={() => handleDeleteArtista(artista)}
+                title="Desactivar artista"
+              >
+                <FiTrash2 className="text-white" />
+              </motion.button>
+            ) : (
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                className="p-2 bg-green-500 rounded-full hover:bg-green-600 transition-colors"
+                onClick={() => handleRestoreArtista(artista)}
+                title="Activar artista"
+              >
+                <FiRefreshCcw className="text-white" />
+              </motion.button>
+            )}
+          </div>
+        </div>
 
-        {modalEditar && (
-          <ModalFormulario
-            formData={formData}
-            onClose={closeModalEditar}
-            onChange={handleInputChange}
-            onSave={handleUpdateArtista}
-            title="Editar Artista"
-          />
-        )}
+        <div className="mb-4 rounded-lg overflow-hidden flex-shrink-0">
+          {artista.foto ? (
+            <img
+              src={typeof artista.foto === 'string' ? artista.foto : URL.createObjectURL(artista.foto)}
+              className="w-full h-48 object-cover rounded-lg"
+              alt={artista.nombre}
+              onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/400x300/333333/FFFFFF?text=Sin+Imagen"; }}
+            />
+          ) : (
+            <div className="w-full h-48 bg-gray-700 rounded-lg flex items-center justify-center">
+              <span className="text-gray-400">Sin imagen</span>
+            </div>
+          )}
+        </div>
 
-        {modalVer && (
-          <ModalVer data={artistas[currentArtista]} onClose={closeModalVer} />
-        )}
-      </AnimatePresence>
+        <div className="flex-grow space-y-3">
+          <div>
+            <p className="text-sm text-gray-400">Género Musical</p>
+            <p className="font-medium">{artista.genero}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">País</p>
+            <p className="font-medium">{artista.pais}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">Biografía</p>
+            <p className="font-medium line-clamp-3">{artista.biografia}</p>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 };
 
-const ModalFormulario = ({ formData, onClose, onChange, onSave, title }) => {
-  const isFormValid =
-    formData.nombre && formData.genero && formData.pais && formData.biografia;
+const ModalFormulario = ({ formData, onClose, onChange, onSave, generosMusicales, paises, errors, title }) => {
+  const [previewFotoUrl, setPreviewFotoUrl] = useState(null);
+
+  useEffect(() => {
+    if (formData.foto instanceof File) {
+      const objectUrl = URL.createObjectURL(formData.foto);
+      setPreviewFotoUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } else if (typeof formData.foto === 'string') {
+      setPreviewFotoUrl(formData.foto);
+    } else {
+      setPreviewFotoUrl(null);
+    }
+  }, [formData.foto]);
 
   return (
     <motion.div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 overflow-auto"
     >
       <motion.div
-        className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-white border-opacity-20"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{
-          type: "spring",
-          stiffness: 80,
-          damping: 20,
-        }}
+        initial={{ scale: 0.9, y: 50 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 50 }}
+        className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto my-8 border border-white border-opacity-20 relative"
       >
-        <h2 className="text-3xl font-bold mb-6 text-white text-center">
-          {title}
-        </h2>
+        <h2 className="text-3xl font-bold mb-6 text-white text-center">{title}</h2>
 
-        <div className="mb-6 text-center">
-          <label
-            htmlFor="foto"
-            className="inline-flex items-center justify-center bg-gradient-to-r from-lime-500 to-green-500 text-white text-base font-semibold px-6 py-3 rounded-full cursor-pointer hover:from-lime-600 hover:to-green-600 focus:ring-2 focus:ring-[#00FF8C] focus:outline-none transition-all duration-200 ease-in-out shadow-lg hover:shadow-xl transform-gpu"
-          >
-            Subir Imagen
-          </label>
-          <input
-            id="foto"
-            type="file"
-            name="foto"
-            accept="image/*" // Restrict to image files
-            onChange={onChange}
-            className="hidden"
-          />
-          {formData.fotoPreviewUrl && ( // Use fotoPreviewUrl for display
-            <motion.div
-              className="mt-4"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
+        <div className="max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="mb-4 text-center">
+            <label className="block text-sm font-semibold mb-2 text-gray-300">Imagen</label>
+            {previewFotoUrl && (
               <img
-                src={formData.fotoPreviewUrl} // Use fotoPreviewUrl for display
+                src={previewFotoUrl}
                 alt="Vista previa"
-                className="mx-auto w-28 h-28 object-cover rounded-full border-3 border-[#00FF8C] shadow-md transition-all duration-300 transform hover:scale-105"
+                className="w-32 h-32 rounded-lg object-cover mx-auto mb-4 border border-gray-600"
               />
-              <p className="text-gray-300 text-sm mt-2 font-medium">
-                {formData.fotoFile ? formData.fotoFile.name : "Imagen actual"}
-              </p>
-            </motion.div>
-          )}
-        </div>
-
-        {[
-          { label: "Nombre", name: "nombre", type: "text", value: formData.nombre },
-          { label: "Género", name: "genero", type: "text", value: formData.genero },
-          { label: "País", name: "pais", type: "text", value: formData.pais },
-        ].map((field) => (
-          <div className="mb-4" key={field.name}>
-            <label className="block text-sm font-semibold text-gray-300 mb-1">
-              {field.label}
+            )}
+            <label
+              htmlFor="foto"
+              className="inline-block bg-[#00FF8C] text-gray-900 px-4 py-2 rounded-lg cursor-pointer hover:bg-[#39FF14] transition font-semibold"
+            >
+              {previewFotoUrl ? "Cambiar Imagen" : "Subir Imagen"}
+              <input
+                id="foto"
+                type="file"
+                name="foto"
+                onChange={onChange}
+                className="hidden"
+                accept="image/*"
+              />
             </label>
-            <input
-              type={field.type}
-              name={field.name}
-              value={field.value}
-              onChange={onChange}
-              className="input-glass p-3 rounded-lg w-full text-base focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
-              required
-            />
           </div>
-        ))}
 
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-300 mb-1">
-            Biografía
-          </label>
-          <textarea
-            name="biografia"
-            value={formData.biografia}
-            onChange={onChange}
-            rows="4"
-            className="input-glass p-3 rounded-lg w-full text-base resize-y focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
-            required
-          />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold mb-1 text-gray-300">Nombre</label>
+              <input
+                type="text"
+                name="nombre"
+                value={formData.nombre}
+                onChange={onChange}
+                className={`w-full p-3 bg-gray-800 border ${
+                  errors.nombre ? "border-red-500" : "border-gray-700"
+                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00FF8C]`}
+              />
+              {errors.nombre && (
+                <p className="text-red-500 text-sm mt-1">{errors.nombre}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-1 text-gray-300">Género Musical</label>
+              <select
+                name="genero"
+                value={formData.genero}
+                onChange={onChange}
+                className={`w-full p-3 bg-gray-800 border ${
+                  errors.genero ? "border-red-500" : "border-gray-700"
+                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00FF8C]`}
+              >
+                <option value="">Selecciona un género</option>
+                {generosMusicales.map((genero, idx) => (
+                  <option key={idx} value={genero}>
+                    {genero}
+                  </option>
+                ))}
+              </select>
+              {errors.genero && (
+                <p className="text-red-500 text-sm mt-1">{errors.genero}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-1 text-gray-300">País</label>
+              <select
+                name="pais"
+                value={formData.pais}
+                onChange={onChange}
+                className={`w-full p-3 bg-gray-800 border ${
+                  errors.pais ? "border-red-500" : "border-gray-700"
+                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00FF8C]`}
+              >
+                <option value="">Selecciona un país</option>
+                {paises.map((pais, idx) => (
+                  <option key={idx} value={pais}>
+                    {pais}
+                  </option>
+                ))}
+              </select>
+              {errors.pais && (
+                <p className="text-red-500 text-sm mt-1">{errors.pais}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-1 text-gray-300">Biografía</label>
+              <textarea
+                name="biografia"
+                value={formData.biografia}
+                onChange={onChange}
+                rows="4"
+                className={`w-full p-3 bg-gray-800 border ${
+                  errors.biografia ? "border-red-500" : "border-gray-700"
+                } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00FF8C]`}
+              ></textarea>
+              {errors.biografia && (
+                <p className="text-red-500 text-sm mt-1">{errors.biografia}</p>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="flex justify-end space-x-3">
-          <motion.button
-            onClick={onSave}
-            className={`px-6 py-3 rounded-full text-white font-semibold transition-all duration-200 ${
-              isFormValid
-                ? "bg-gradient-to-r from-lime-500 to-green-500 hover:from-lime-600 hover:to-green-600 shadow-md hover:shadow-lg focus:ring-4 focus:ring-[#00FF8C] focus:ring-opacity-50"
-                : "bg-gray-700 cursor-not-allowed opacity-70"
-            } transform-gpu`}
-            disabled={!isFormValid}
-            whileHover={{ scale: isFormValid ? 1.05 : 1 }}
-            whileTap={{ scale: isFormValid ? 0.95 : 1 }}
-          >
-            Guardar
-          </motion.button>
+        <div className="flex justify-end space-x-3 mt-8">
           <motion.button
             onClick={onClose}
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 text-white font-semibold hover:from-gray-600 hover:to-gray-700 shadow-md hover:shadow-lg transition-all duration-200 transform-gpu focus:outline-none focus:ring-4 focus:ring-gray-600 focus:ring-opacity-50"
+            className="bg-gradient-to-r from-gray-700 to-gray-800 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:from-gray-600 hover:to-gray-700 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Cerrar
+            Cancelar
+          </motion.button>
+          <motion.button
+            onClick={onSave}
+            className="bg-gradient-to-r from-[#00FF8C] to-[#39FF14] text-gray-900 font-bold py-3 px-6 rounded-full shadow-lg hover:from-[#39FF14] hover:to-[#00FF8C] transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Guardar
           </motion.button>
         </div>
       </motion.div>
@@ -874,87 +744,63 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, title }) => {
 const ModalVer = ({ data, onClose }) => {
   return (
     <motion.div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 overflow-auto"
     >
       <motion.div
-        className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-white border-opacity-20"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{
-          type: "spring",
-          stiffness: 80,
-          damping: 20,
-        }}
+        initial={{ scale: 0.9, y: 50 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 50 }}
+        className="glass-card p-8 rounded-2xl shadow-2xl w-full max-w-sm md:max-w-md mx-auto my-8 border border-white border-opacity-20 relative"
       >
-        <h2 className="text-3xl font-bold mb-6 text-white text-center">
-          Detalles del Artista
-        </h2>
+        <h2 className="text-3xl font-bold mb-6 text-white text-center">Detalles del Artista</h2>
 
-        <div className="mb-4 text-center">
-          {data.foto ? (
-            <img
-              src={data.foto} // Now directly use the URL
-              alt={`Foto de ${data.nombre}`}
-              className="mx-auto w-32 h-32 object-cover rounded-full border-4 border-[#00FF8C] shadow-lg transition-all duration-300 transform hover:scale-105"
-            />
-          ) : (
-            <div className="mx-auto w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 text-sm font-semibold border-4 border-gray-600">
-              Sin Foto
+        <div className="max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-4">
+            <div className="text-center mb-6">
+              {data.foto ? (
+                <img
+                  src={typeof data.foto === 'string' ? data.foto : URL.createObjectURL(data.foto)}
+                  alt="Artista"
+                  className="w-40 h-40 rounded-lg object-cover mx-auto border border-gray-600 shadow-md"
+                  onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/400x300/333333/FFFFFF?text=Sin+Imagen"; }}
+                />
+              ) : (
+                <div className="w-40 h-40 bg-gray-700 rounded-lg flex items-center justify-center mx-auto border border-gray-600 shadow-md">
+                  <span className="text-gray-400 text-lg">Sin foto</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="space-y-4 text-gray-200">
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-0.5">
-              Nombre:
-            </label>
-            <p className="text-white text-lg font-medium">{data.nombre}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-0.5">
-              Género:
-            </label>
-            <p className="text-gray-200">{data.genero}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-0.5">
-              País:
-            </label>
-            <p className="text-gray-200">{data.pais}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-0.5">
-              Biografía:
-            </label>
-            <p className="text-gray-200 leading-relaxed text-justify">
-              {data.biografia}
-            </p>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-0.5">
-              Estado:
-            </label>
-            <span
-              className={`px-4 py-1 rounded-full text-sm font-semibold ${
-                data.estado
-                  ? "bg-gradient-to-r from-green-500 to-lime-500 text-white"
-                  : "bg-red-600 text-white"
-              }`}
-            >
-              {data.estado ? "Activo" : "Inactivo"}
-            </span>
+            {[
+              { label: "Nombre", value: data.nombre },
+              { label: "Género Musical", value: data.genero },
+              { label: "País", value: data.pais },
+              { label: "Biografía", value: data.biografia },
+            ].map((item) => (
+              <div key={item.label} className="flex flex-col">
+                <label className="block text-sm font-semibold mb-1 text-gray-300">{item.label}</label>
+                <p className="text-lg text-white bg-gray-800 p-3 rounded-lg border border-gray-700">{item.value}</p>
+              </div>
+            ))}
+
+            <div className="flex flex-col">
+              <label className="block text-sm font-semibold mb-1 text-gray-300">Estado</label>
+              <span className={`px-4 py-2 rounded-full text-base font-bold w-fit ${
+                data.estado ? "bg-green-600 text-white" : "bg-red-600 text-white"
+              }`}>
+                {data.estado ? "Activo" : "Inactivo"}
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="flex justify-end mt-8">
           <motion.button
             onClick={onClose}
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 text-white font-semibold hover:from-gray-600 hover:to-gray-700 shadow-md hover:shadow-lg transition-all duration-200 transform-gpu focus:outline-none focus:ring-4 focus:ring-gray-600 focus:ring-opacity-50"
+            className="bg-gradient-to-r from-[#00FF8C] to-[#39FF14] text-gray-900 font-bold py-3 px-6 rounded-full shadow-lg hover:from-[#39FF14] hover:to-[#00FF8C] transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -966,11 +812,24 @@ const ModalVer = ({ data, onClose }) => {
   );
 };
 
+ArtistaCard.propTypes = {
+  artista: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  cardVariants: PropTypes.object.isRequired,
+  openModalVer: PropTypes.func.isRequired,
+  openModalEditar: PropTypes.func.isRequired,
+  handleDeleteArtista: PropTypes.func.isRequired,
+  handleRestoreArtista: PropTypes.func.isRequired,
+};
+
 ModalFormulario.propTypes = {
   formData: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  generosMusicales: PropTypes.array.isRequired,
+  paises: PropTypes.array.isRequired,
+  errors: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
 };
 
