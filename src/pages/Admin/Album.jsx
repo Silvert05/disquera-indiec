@@ -58,16 +58,7 @@ const Album = () => {
       url: "https://open.spotify.com/album/2Kh43m04B1UkVcpcRa1Zug",
       estado: true,
     },
-    {
-      id: 4,
-      foto: "https://upload.wikimedia.org/wikipedia/en/2/2e/The_Eminem_Show.jpg",
-      titulo: "The Eminem Show",
-      artista: "Eminem",
-      año: 2002,
-      genero: "Hip-Hop",
-      url: "https://open.spotify.com/album/2cWBwpqMsDJC1ZUwz813lo",
-      estado: false,
-    }
+    
   ]);
 
   const generos = [

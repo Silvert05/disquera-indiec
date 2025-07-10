@@ -1,39 +1,31 @@
 // ===================== IMPORTACIONES =====================
-// React y utilidades necesarias
 import { useState, useRef } from "react";
 import PropTypes from "prop-types";
-
-// Librerías externas
-import Swal from "sweetalert2"; // Para alertas estilizadas
-import { motion, AnimatePresence } from "framer-motion"; // Para animaciones
-import { Bar } from "react-chartjs-2"; // Gráfico de barras
-import * as XLSX from "xlsx"; // Para importar/exportar archivos Excel
-import DOMPurify from "dompurify"; // Para sanitizar entradas
-
-// Íconos de Feather
-import { FiUpload, FiEye, FiEdit, FiDownload, FiFileText, FiPlus, FiShoppingBag, FiShoppingCart, FiRefreshCcw, FiMusic } from "react-icons/fi";
-
-// Configuración de Chart.js
+import Swal from "sweetalert2";
+import { motion, AnimatePresence } from "framer-motion";
+import { Bar } from "react-chartjs-2";
+import * as XLSX from "xlsx";
+import DOMPurify from "dompurify";
+import { FiUpload, FiEye, FiEdit, FiDownload, FiFileText, FiPlus, FiShoppingBag, FiShoppingCart, FiRefreshCcw, FiMusic, FiImage } from "react-icons/fi";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 // ===================== COMPONENTE PRINCIPAL =====================
 const ArtistAcquisition = () => {
-  // ----- Estados Generales y de Vista -----
+  // Estados
   const [activeView, setActiveView] = useState("main");
-
-  // ----- Estado de las Transacciones (Artistas) -----
   const [transacciones, setTransacciones] = useState([
     {
-      nombre: "Bad Bunny",
+      nombre: "Ozzy Osbourne",
       tipo: "compra",
-      fechaInicio: "2023-01-01",
+      fechaInicio: "1995-01-01",
       fechaFin: "2024-01-01",
       monto: 100000,
       exclusividad: "exclusivo",
       contrato: null,
       estado: "adquirido",
       terminos: "Términos del contrato...",
+      foto: "https://cdn.mos.cms.futurecdn.net/v9tv7ToPZtBHsgfbqLfnXe.jpg",
       articulos: [
         {
           id: 1,
@@ -45,9 +37,52 @@ const ArtistAcquisition = () => {
         },
       ],
     },
+    {
+      nombre: "Ronnie James Dio",
+      tipo: "compra",
+      fechaInicio: "2000-02-01",
+      fechaFin: "2015-02-01",
+      monto: 120000,
+      exclusividad: "exclusivo",
+      contrato: null,
+      estado: "adquirido",
+      terminos: "Términos del contrato...",
+      foto: "https://www.syracuse.com/resizer/YjzCF-oF8rNoPxjTPjJc1PIgODA=/arc-anglerfish-arc2-prod-advancelocal/public/4QCYVT2BB5HEPL4U2ADPIG5M7U.jpg",
+      articulos: [
+        {
+          id: 2,
+          nombre: "Gorra",
+          precio: 20,
+          stock: 80,
+          vendidos: 35,
+          foto: null,
+        },
+      ],
+    },
+    {
+      nombre: "Robert Plant",
+      tipo: "compra",
+      fechaInicio: "1980-03-01",
+      fechaFin: "2002-03-01",
+      monto: 150000,
+      exclusividad: "exclusivo",
+      contrato: null,
+      estado: "adquirido",
+      terminos: "Términos del contrato...",
+      foto: "https://www.coastaljazz.ca/wp-content/uploads/2018/06/robert_blog.png",
+      articulos: [
+        {
+          id: 3,
+          nombre: "Poster",
+          precio: 15,
+          stock: 120,
+          vendidos: 60,
+          foto: null,
+        },
+      ],
+    },
   ]);
 
-  // ----- Estados para control de Modales -----
   const [modalCrear, setModalCrear] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalVer, setModalVer] = useState(false);
@@ -58,16 +93,12 @@ const ArtistAcquisition = () => {
   const [selectedArtist, setSelectedArtist] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
-  // ----- Estado para agregar un nuevo Artículo -----
   const [nuevoArticulo, setNuevoArticulo] = useState({
     nombre: "",
     precio: 0,
     stock: 0,
     foto: null,
   });
-
-  // ----- Estado para datos del formulario -----
   const [formData, setFormData] = useState({
     nombre: "",
     tipo: "compra",
@@ -77,18 +108,16 @@ const ArtistAcquisition = () => {
     contrato: null,
     estado: "adquirido",
     terminos: "",
+    foto: null,
     articulos: [],
   });
 
-  // Función para sanitizar entradas
-  const sanitizeInput = (input) => {
-    return DOMPurify.sanitize(input);
-  };
+  // Funciones auxiliares
+  const sanitizeInput = (input) => DOMPurify.sanitize(input);
 
-  // ===================== FUNCIONES DE MODALES =====================
+  // Funciones de modales
   const openModalCrear = () => setModalCrear(true);
   const closeModalCrear = () => setModalCrear(false);
-
   const openModalEditar = (index) => {
     setCurrentIndex(index);
     setFormData(transacciones[index]);
@@ -96,13 +125,11 @@ const ArtistAcquisition = () => {
     setModalEditar(true);
   };
   const closeModalEditar = () => setModalEditar(false);
-
   const openModalVer = (index) => {
     setCurrentIndex(index);
     setModalVer(true);
   };
   const closeModalVer = () => setModalVer(false);
-
   const openModalVenta = (index) => {
     setCurrentIndex(index);
     setFormData(transacciones[index]);
@@ -116,7 +143,7 @@ const ArtistAcquisition = () => {
   };
   const closeModalVenta = () => setModalVenta(false);
 
-  // ===================== MANEJO DE INPUTS =====================
+  // Manejo de inputs
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     setFormData((prev) => ({
@@ -125,17 +152,15 @@ const ArtistAcquisition = () => {
     }));
   };
 
-  // ===================== VALIDACIÓN DEL FORMULARIO =====================
-  const validateForm = () => {
-    return (
-      formData.nombre &&
-      formData.fechaInicio &&
-      (isCompra ? formData.fechaFin : true) &&
-      formData.monto > 0
-    );
-  };
+  // Validación
+  const validateForm = () => (
+    formData.nombre &&
+    formData.fechaInicio &&
+    (isCompra ? formData.fechaFin : true) &&
+    formData.monto > 0
+  );
 
-  // ===================== ACCIONES CRUD =====================
+  // Acciones CRUD
   const handleAddTransaccion = () => {
     if (!validateForm()) {
       Swal.fire("Error", "Todos los campos requeridos deben estar completos", "error");
@@ -167,6 +192,7 @@ const ArtistAcquisition = () => {
         contrato: null,
         estado: isCompra ? "adquirido" : "vendido",
         terminos: "",
+        foto: null,
         articulos: [],
       });
     }, 1000);
@@ -232,7 +258,7 @@ const ArtistAcquisition = () => {
     }, 1000);
   };
 
-  // ===================== BUSQUEDA Y EXPORTACIÓN =====================
+  // Búsqueda y exportación
   const handleSearchChange = (e) => setSearchTerm(sanitizeInput(e.target.value));
 
   const handleExportExcel = () => {
@@ -246,17 +272,15 @@ const ArtistAcquisition = () => {
     item.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ===================== ESTADÍSTICAS Y AGREGAR ARTÍCULOS =====================
-  const calcularEstadisticas = (articulos) => {
-    return {
-      totalVendido: articulos.reduce((sum, art) => sum + art.vendidos, 0),
-      ingresosTotales: articulos.reduce((sum, art) => sum + art.vendidos * art.precio, 0),
-      articuloMasVendido: articulos.reduce(
-        (max, art) => (art.vendidos > max.vendidos ? art : max),
-        { vendidos: -1 }
-      ),
-    };
-  };
+  // Estadísticas y artículos
+  const calcularEstadisticas = (articulos) => ({
+    totalVendido: articulos.reduce((sum, art) => sum + art.vendidos, 0),
+    ingresosTotales: articulos.reduce((sum, art) => sum + art.vendidos * art.precio, 0),
+    articuloMasVendido: articulos.reduce(
+      (max, art) => (art.vendidos > max.vendidos ? art : max),
+      { vendidos: -1 }
+    ),
+  });
 
   const agregarArticulo = () => {
     if (!nuevoArticulo.nombre || nuevoArticulo.precio <= 0 || nuevoArticulo.stock <= 0) {
@@ -284,7 +308,7 @@ const ArtistAcquisition = () => {
     }, 1000);
   };
 
-  // Framer Motion Variants
+  // Variantes de animación
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -323,44 +347,44 @@ const ArtistAcquisition = () => {
     tap: { scale: 0.95 },
   };
 
-  // ===================== VISTA: PANEL DE MERCHANDISING =====================
-if (activeView === "merchandising") {
-  const currentArtist = transacciones.find((a) => a.nombre === selectedArtist);
-  if (!currentArtist) {
+  // Vista de Merchandising
+  if (activeView === "merchandising") {
+    const currentArtist = transacciones.find((a) => a.nombre === selectedArtist);
+    if (!currentArtist) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100">
+          <p className="mb-4 text-xl">No se ha seleccionado un artista para Merchandising.</p>
+          <motion.button
+            onClick={() => setActiveView("main")}
+            className="bg-gradient-to-r from-gray-700 to-gray-800 text-white px-6 py-3 rounded-full shadow-lg"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            Volver
+          </motion.button>
+        </div>
+      );
+    }
+    
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100">
-        <p className="mb-4 text-xl">No se ha seleccionado un artista para Merchandising.</p>
-        <motion.button
-          onClick={() => setActiveView("main")}
-          className="bg-gradient-to-r from-gray-700 to-gray-800 text-white px-6 py-3 rounded-full shadow-lg"
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-        >
-          Volver
-        </motion.button>
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 p-8">
+        <PanelMerchandising
+          artista={currentArtist}
+          onClose={() => {
+            setActiveView("main");
+            setSelectedArtist(null);
+          }}
+          nuevoArticulo={nuevoArticulo}
+          setNuevoArticulo={setNuevoArticulo}
+          agregarArticulo={agregarArticulo}
+          calcularEstadisticas={calcularEstadisticas}
+        />
       </div>
     );
   }
-  
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 p-8">
-      <PanelMerchandising
-        artista={currentArtist}
-        onClose={() => {
-          setActiveView("main");
-          setSelectedArtist(null);
-        }}
-        nuevoArticulo={nuevoArticulo}
-        setNuevoArticulo={setNuevoArticulo}
-        agregarArticulo={agregarArticulo}
-        calcularEstadisticas={calcularEstadisticas}
-      />
-    </div>
-    );
-  }
 
-  // ===================== VISTA PRINCIPAL =====================
+  // Vista Principal con Tarjetas
   return (
     <div className="flex-1 md:ml-72 bg-gradient-to-br from-gray-950 via-black to-gray-900 text-gray-100 min-h-screen p-8 relative overflow-hidden">
       {/* Background Animated Gradient */}
@@ -445,203 +469,171 @@ if (activeView === "merchandising") {
           ></div>
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between">
             <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-lg text-center sm:text-left">
-              Gestión de Artistas
+              Artistas Adquiridos
             </h1>
-            <motion.button
-              onClick={() => {
-                setIsCompra(true);
-                openModalCrear();
-              }}
-              className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group mt-4 sm:mt-0"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              Comprar Artista
-            </motion.button>
+            <div className="flex gap-2 mt-4 sm:mt-0">
+              <motion.button
+                onClick={() => {
+                  setIsCompra(true);
+                  openModalCrear();
+                }}
+                className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+              >
+                <FiPlus /> Agregar Grupo
+              </motion.button>
+              <motion.button
+                onClick={handleExportExcel}
+                className="bg-gradient-to-r from-gray-700 to-gray-800 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+              >
+                <FiDownload /> Exportar
+              </motion.button>
+            </div>
           </div>
         </motion.div>
 
-        {/* Controles: Búsqueda y Exportación */}
+        {/* Controles: Búsqueda */}
         <motion.div
-          className="glass-card p-6 mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4"
+          className="glass-card p-6 mb-8"
           variants={itemVariants}
           initial="hidden"
           animate="visible"
           whileHover="hover"
           transition={{ delay: 0.3 }}
         >
-          <div className="relative w-full sm:w-auto flex-grow">
+          <div className="relative w-full">
             <input
               type="text"
-              placeholder="Buscar artista..."
+              placeholder="Buscar grupo..."
               value={searchTerm}
               onChange={handleSearchChange}
               className="glass-card bg-transparent border border-gray-700 p-3 pl-10 rounded-lg w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FF8C]"
             />
             <FiEye className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
-          <motion.button
-            onClick={handleExportExcel}
-            className="bg-gradient-to-r from-green-600 to-lime-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group w-full sm:w-auto"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <FiDownload className="group-hover:translate-y-0.5 transition-transform" />
-            Exportar a Excel
-          </motion.button>
         </motion.div>
 
-        {/* Tabla de Transacciones */}
+        {/* Tarjetas de Artistas */}
         <motion.div
-          className="glass-card p-6 overflow-x-auto custom-scrollbar"
-          variants={itemVariants}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
           initial="hidden"
           animate="visible"
-          transition={{ delay: 0.4 }}
         >
-          <table className="min-w-full table-auto rounded-lg overflow-hidden">
-            <thead>
-              <tr className="text-white uppercase text-sm leading-normal glass-table-header">
-                <th className="py-3 px-6 text-left">Artista</th>
-                <th className="py-3 px-6 text-left">Tipo</th>
-                <th className="py-3 px-6 text-left">Vigencia</th>
-                <th className="py-3 px-6 text-left">Monto</th>
-                <th className="py-3 px-6 text-center">Estado</th>
-                <th className="py-3 px-6 text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-200 text-sm font-light">
-              {filteredData.map((item, index) => (
-                <motion.tr
-                  key={index}
-                  className="border-b border-gray-700 glass-table-row"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 * index }}
+          {filteredData.map((item, index) => (
+            <motion.div
+              key={index}
+              className="glass-card p-6 rounded-xl"
+              variants={itemVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <div className="flex flex-col items-center mb-4">
+                {item.foto ? (
+                  <img
+                    src={item.foto}
+                    alt={item.nombre}
+                    className="w-full h-48 object-cover rounded-lg mb-4"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
+                    <FiImage className="text-gray-500 text-4xl" />
+                  </div>
+                )}
+                <div className="w-full flex justify-between items-start">
+                  <h3 className="text-2xl font-bold text-white">{item.nombre}</h3>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    item.estado === "adquirido" ? "bg-green-500" : "bg-red-500"
+                  }`}>
+                    {item.estado}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-400">Género musical</h4>
+                  <p className="text-lg font-medium text-white">Rock</p>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-400">Descripción</h4>
+                  <p className="text-lg font-medium text-white">
+                    {item.nombre === "AC/DC" ? "Banda de rock clásico" : "Banda de rock"}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-400">Plataforma</h4>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-medium text-white">Spotify</span>
+                    <span className="text-green-400">💷 Visitar</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 mt-6">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center"
+                  onClick={() => openModalVer(index)}
                 >
-                  <td className="py-4 px-6 whitespace-nowrap">{item.nombre}</td>
-                  <td className="py-4 px-6 whitespace-nowrap capitalize">{item.tipo}</td>
-                  <td className="py-4 px-6">
-                    {item.fechaInicio} - {item.fechaFin}
-                  </td>
-                  <td className="py-4 px-6">${item.monto.toLocaleString()}</td>
-                  <td className="py-4 px-6 text-center">
-                    <span
-                      className={`px-3 py-1 rounded-full text-white text-xs font-semibold ${
-                        item.estado === "activo" || item.estado === "adquirido"
-                          ? "bg-gradient-to-r from-green-500 to-lime-500"
-                          : "bg-red-600"
-                      }`}
-                    >
-                      {item.estado}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6 text-center flex space-x-2 justify-center items-center">
+                  <FiEye className="text-white" size={16} />
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center"
+                  onClick={() => openModalEditar(index)}
+                >
+                  <FiEdit className="text-white" size={16} />
+                </motion.button>
+
+                {item.estado === "adquirido" && (
+                  <>
                     <motion.button
-                      whileHover={{
-                        scale: 1.1,
-                        boxShadow: "0 4px 15px rgba(59, 130, 246, 0.7)",
-                      }}
-                      whileTap={{ scale: 0.9 }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                      style={{
-                        backgroundColor: "#3B82F6",
-                        boxShadow: "0 4px 10px rgba(59, 130, 246, 0.6)",
-                      }}
-                      onClick={() => openModalVer(index)}
-                      title="Ver Detalles"
-                      transition={{ duration: 0.2 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center"
+                      onClick={() => openModalVenta(index)}
                     >
-                      <FiEye className="text-white" size={20} />
+                      <FiShoppingCart className="text-white" size={16} />
                     </motion.button>
 
                     <motion.button
-                      whileHover={{
-                        scale: 1.1,
-                        boxShadow: "0 4px 15px rgba(234, 179, 8, 0.7)",
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center"
+                      onClick={() => {
+                        setSelectedArtist(item.nombre);
+                        setActiveView("merchandising");
                       }}
-                      whileTap={{ scale: 0.9 }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                      style={{
-                        backgroundColor: "#D97706",
-                        boxShadow: "0 4px 10px rgba(234, 179, 8, 0.6)",
-                      }}
-                      onClick={() => openModalEditar(index)}
-                      title="Editar"
-                      transition={{ duration: 0.2 }}
                     >
-                      <FiEdit className="text-white" size={20} />
+                      <FiShoppingBag className="text-white" size={16} />
                     </motion.button>
+                  </>
+                )}
 
-                    {item.estado === "adquirido" && (
-                      <>
-                        <motion.button
-                          whileHover={{
-                            scale: 1.1,
-                            boxShadow: "0 4px 15px rgba(22, 163, 74, 0.7)",
-                          }}
-                          whileTap={{ scale: 0.9 }}
-                          className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                          style={{
-                            backgroundColor: "#16A34A",
-                            boxShadow: "0 4px 10px rgba(22, 163, 74, 0.6)",
-                          }}
-                          onClick={() => openModalVenta(index)}
-                          title="Vender"
-                          transition={{ duration: 0.2 }}
-                        >
-                          <FiShoppingCart className="text-white" size={20} />
-                        </motion.button>
-
-                        <motion.button
-                          whileHover={{
-                            scale: 1.1,
-                            boxShadow: "0 4px 15px rgba(139, 92, 246, 0.7)",
-                          }}
-                          whileTap={{ scale: 0.9 }}
-                          className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                          style={{
-                            backgroundColor: "#8B5CF6",
-                            boxShadow: "0 4px 10px rgba(139, 92, 246, 0.6)",
-                          }}
-                          onClick={() => {
-                            setSelectedArtist(item.nombre);
-                            setActiveView("merchandising");
-                          }}
-                          title="Merchandising"
-                          transition={{ duration: 0.2 }}
-                        >
-                          <FiShoppingBag className="text-white" size={20} />
-                        </motion.button>
-                      </>
-                    )}
-
-                    {item.estado === "vendido" && (
-                      <motion.button
-                        whileHover={{
-                          scale: 1.1,
-                          boxShadow: "0 4px 15px rgba(124, 58, 237, 0.7)",
-                        }}
-                        whileTap={{ scale: 0.9 }}
-                        className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                        style={{
-                          backgroundColor: "#7C3AED",
-                          boxShadow: "0 4px 10px rgba(124, 58, 237, 0.6)",
-                        }}
-                        onClick={() => handleRestore(index)}
-                        title="Restaurar"
-                        transition={{ duration: 0.2 }}
-                      >
-                        <FiRefreshCcw className="text-white" size={20} />
-                      </motion.button>
-                    )}
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
+                {item.estado === "vendido" && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center"
+                    onClick={() => handleRestore(index)}
+                  >
+                    <FiRefreshCcw className="text-white" size={16} />
+                  </motion.button>
+                )}
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Animación de carga */}
@@ -716,7 +708,7 @@ if (activeView === "merchandising") {
 
 // ===================== COMPONENTES SECUNDARIOS =====================
 
-// ----- ModalTransaccion (Compra/Edición) -----
+// ModalTransaccion (Compra/Edición)
 const ModalTransaccion = ({ isOpen, onClose, formData, onChange, onSave, isCompra, setIsCompra }) => {
   if (!isOpen) return null;
 
@@ -814,6 +806,31 @@ const ModalTransaccion = ({ isOpen, onClose, formData, onChange, onSave, isCompr
             />
           </div>
 
+          {/* Campo: Foto del Artista */}
+          <div className="sm:col-span-2">
+            <label className="block mb-2 text-gray-300">Foto del Artista</label>
+            <label className="w-full p-3 rounded-lg cursor-pointer flex items-center justify-center font-semibold bg-gradient-to-r from-green-600 to-lime-600 text-white hover:from-green-700 hover:to-lime-700 transition-all duration-300">
+              <FiImage className="mr-2" />
+              {formData.foto ? (typeof formData.foto === 'string' ? 'Imagen actual' : formData.foto.name) : "Subir Foto"}
+              <input
+                type="file"
+                name="foto"
+                onChange={onChange}
+                className="hidden"
+                accept="image/*"
+              />
+            </label>
+            {formData.foto && (
+              <div className="mt-4 flex justify-center">
+                <img
+                  src={typeof formData.foto === 'string' ? formData.foto : URL.createObjectURL(formData.foto)}
+                  alt="Preview"
+                  className="max-h-40 rounded-lg shadow"
+                />
+              </div>
+            )}
+          </div>
+
           {/* Campo: Subir archivo PDF */}
           <div className="sm:col-span-2">
             <label className="block mb-2 text-gray-300">
@@ -879,7 +896,7 @@ ModalTransaccion.propTypes = {
   setIsCompra: PropTypes.func.isRequired,
 };
 
-// ----- ModalVer (Visualización de detalles) -----
+// ModalVer (Visualización de detalles)
 const ModalVer = ({ data, onClose }) => {
   return (
     <motion.div
@@ -896,6 +913,18 @@ const ModalVer = ({ data, onClose }) => {
         transition={{ type: "spring", stiffness: 150, damping: 12 }}
       >
         <h2 className="text-2xl font-bold mb-6 text-white">Detalles de Transacción</h2>
+        
+        {/* Foto del artista */}
+        {data.foto && (
+          <div className="flex justify-center mb-6">
+            <img
+              src={typeof data.foto === 'string' ? data.foto : URL.createObjectURL(data.foto)}
+              alt={data.nombre}
+              className="max-h-60 rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+
         <div className="space-y-4">
           <div>
             <label className="font-semibold text-gray-300">Artista:</label>
@@ -953,7 +982,7 @@ ModalVer.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-// ----- ModalVenta (Venta de Artista) -----
+// ModalVenta (Venta de Artista)
 const ModalVenta = ({ isOpen, onClose, formData, onChange, onConfirm }) => {
   if (!isOpen) return null;
 
@@ -992,6 +1021,17 @@ const ModalVenta = ({ isOpen, onClose, formData, onChange, onConfirm }) => {
               className="glass-card bg-transparent border border-gray-700 p-3 rounded-lg w-full text-gray-100"
             />
           </div>
+
+          {/* Foto del artista */}
+          {formData.foto && (
+            <div className="flex justify-center">
+              <img
+                src={typeof formData.foto === 'string' ? formData.foto : URL.createObjectURL(formData.foto)}
+                alt={formData.nombre}
+                className="max-h-40 rounded-lg shadow"
+              />
+            </div>
+          )}
 
           {/* Campo: Precio de Venta */}
           <div>
@@ -1072,7 +1112,6 @@ ModalVenta.propTypes = {
   onConfirm: PropTypes.func.isRequired,
 };
 
-
 const PanelMerchandising = ({
   artista,
   onClose,
@@ -1086,7 +1125,7 @@ const PanelMerchandising = ({
   const ventasPromedio =
     totalArticulos > 0 ? (stats.ingresosTotales / totalArticulos).toFixed(2) : 0;
 
-  const fileInputRef = useRef(null); // This ref is not currently used, but kept as it was in the original code.
+  const fileInputRef = useRef(null);
   const [articles, setArticles] = useState([]);
   const [chartData, setChartData] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
@@ -1276,9 +1315,18 @@ const PanelMerchandising = ({
             }}
           ></div>
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight drop-shadow-lg text-center sm:text-left mb-4 sm:mb-0">
-              Merchandising de {artista.nombre}
-            </h1>
+            <div className="flex items-center gap-4">
+              {artista.foto && (
+                <img
+                  src={typeof artista.foto === 'string' ? artista.foto : URL.createObjectURL(artista.foto)}
+                  alt={artista.nombre}
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-[#00FF8C]"
+                />
+              )}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight drop-shadow-lg text-center sm:text-left mb-4 sm:mb-0">
+                Merchandising de {artista.nombre}
+              </h1>
+            </div>
             <motion.button
               onClick={onClose}
               className="bg-gradient-to-r from-lime-500 to-green-500 text-white font-bold py-2 px-5 sm:py-3 sm:px-6 rounded-full shadow-lg flex items-center justify-center gap-2 group text-xl sm:text-2xl"
@@ -1693,6 +1741,7 @@ const PanelMerchandising = ({
 PanelMerchandising.propTypes = {
   artista: PropTypes.shape({
     nombre: PropTypes.string.isRequired,
+    foto: PropTypes.any,
     articulos: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -1715,4 +1764,5 @@ PanelMerchandising.propTypes = {
   agregarArticulo: PropTypes.func.isRequired,
   calcularEstadisticas: PropTypes.func.isRequired,
 };
+
 export default ArtistAcquisition;
